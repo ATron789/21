@@ -22,7 +22,7 @@ class Card
 end
 
 class Deck
-  attr_reader :cards, :ranks
+  attr_reader :cards, :ranks, #:dealt_card
   def initialize
     @ranks = [*(2..10), 'J', 'Q', 'K', 'A']
     @suits = ['♣', '♥', '♠', '♦']
@@ -36,10 +36,18 @@ class Deck
     end
   @cards.shuffle!
   end
-  def output_card
-    puts "The #{@cards[0][0]} of #{@cards[0][1]}"
+
+  def output_card(card)
+    puts "The #{card[0][0]} of #{card[0][1]}"
   end
-  def deal(number)
-    number.times {@cards.shift.output_card}
+  def deal
+     @dealt_card = @cards.shift
   end
+
+  # def output_card(card)
+  #   puts "The #{card[0][0]} of #{card[0][1]}"
+  # end
+  # def deal
+  #   number.times {@cards.shift.output_card}
+  # end
 end
