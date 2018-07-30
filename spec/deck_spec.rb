@@ -8,7 +8,7 @@ describe Deck do
   it 'has all different cards' do
     raise unless subject.uniq.length == subject.length
   end
-  context 'number of decks' do
+  context 'More than one deck' do
     subject {Deck.new (2)}
     it 'check the number of decks' do
       raise unless subject.cards.length / 52 == subject.number_of_decks
