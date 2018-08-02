@@ -11,6 +11,12 @@ describe Card do
   it 'has a suit' do
     raise unless card.suit == '♥'
   end
+  it 'has a value that equals the rank' do
+    expect(card.value).to eq 7
+  end
+  it 'face cards value equals 10' do
+    expect(card(rank: 'K',suit:'♣').value).to eq 10
+  end
   context 'equality' do
     subject {card(suit: '♣', rank: 4)}
 
