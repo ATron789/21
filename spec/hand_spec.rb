@@ -8,13 +8,10 @@ describe Hand do
   end
   context 'holds cards' do
     let(:card) {Card.new(suit: '♣', rank: 4)}
+    let(:hand_value) {Array.new}
     it 'has a card' do
       subject.hand << card
       expect(subject.hand.length).to eq 1
-    end
-    it 'has 2 cards' do
-      2.times {subject.hand << card}
-      expect(subject.hand.length).to eq 2
     end
   end
   context 'from a deck' do
@@ -26,6 +23,10 @@ describe Hand do
     it 'has a 2 cards from a deck' do
       2.times {subject.hand << deck.deal}
       expect(subject.hand.length).to eq 2
+    end
+    it 'the hand has a value > 0' do
+      2.times {subject.hand << deck.deal}
+      expect(subject.hand.inject { |x,sum| x.value + sum.value} ).to be > 0
     end
   end
 end

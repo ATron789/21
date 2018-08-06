@@ -1,9 +1,9 @@
-require 'player'
+require 'house'
 require 'deck'
 
-describe Player do
-  subject {Player.new}
-  it 'the player has an empty hand' do
+describe House do
+  subject {House.new}
+  it 'the house has an empty hand' do
     expect(subject.hand).to eq Array.new
   end
   context 'receiving cards from Deck(s)' do

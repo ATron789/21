@@ -1,4 +1,4 @@
-require 'card'
+require_relative 'card'
 class Deck
   attr_reader :cards, :number_of_decks
   def initialize(number_of_decks = 1)
