@@ -14,7 +14,7 @@ describe House do
     end
     it 'the hand has a value > 0' do
       2.times {subject.hand << deck.deal}
-      expect(subject.hand.inject { |x,sum| x.value + sum.value} ).to be > 0
+      expect(subject.hand.inject { |x,sum| x.value + sum.value}).to be_between(1, 21)
     end
   end
 end
