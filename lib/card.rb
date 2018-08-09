@@ -1,8 +1,6 @@
 #the Card class defines the property of a card. it has a rank, a suit and a value.
 class Card
-  attr_accessor :rank, :suit
-  attr_reader :value
-
+  attr_accessor :rank, :suit, :value
   def initialize(rank:, suit:)
     @rank = rank
     @suit = suit

@@ -1,6 +1,7 @@
 require_relative 'card'
 class Deck
-  attr_reader :cards, :number_of_decks
+  attr_reader :cards
+  attr_accessor :number_of_decks
   def initialize(number_of_decks = 1)
     @ranks = [*(2..10), 'J', 'Q', 'K', 'A']
     @suits = ['♣', '♥', '♠', '♦']
