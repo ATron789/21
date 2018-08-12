@@ -18,7 +18,7 @@ class Deck
   @cards.shuffle!
   end
 
-  def deal
-    @cards.shift
+  def deal(a)
+    a << @cards.shift
   end
 end

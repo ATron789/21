@@ -18,16 +18,16 @@ describe Hand do
   context 'from a deck' do
     let(:deck) {Deck.new}
     it 'has a card from a deck' do
-      subject.hand << deck.deal
+      deck.deal(subject.hand)
       expect(subject.hand.length).to eq 1
     end
     it 'has a 2 cards from a deck' do
-      2.times {subject.hand << deck.deal}
+      2.times {deck.deal(subject.hand)}
       expect(subject.hand.length).to eq 2
     end
     it 'the hand has a value > 0' do
-      2.times {subject.hand << deck.deal}
-      expect(subject.hand.inject { |x,sum| x.value + sum.value}).to be_between(1, 21) 
+      2.times {deck.deal(subject.hand)}
+      expect(subject.hand.inject { |x,sum| x.value + sum.value}).to be_between(1, 21)
     end
   end
 end

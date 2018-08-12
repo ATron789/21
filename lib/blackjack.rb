@@ -7,6 +7,7 @@ require 'pry'
 puts 'Welcome to Alberto\'s Black Jack?'
 player1 = Player.new
 house = House.new
+system 'clear' if gets.chomp
 
 puts 'What should I call you'
 user_name = gets.chomp
@@ -19,28 +20,55 @@ if user_name.empty?
 else
   player1.name = user_name
 end
-binding.pry
+system 'clear' if player1.name
+# binding.pry
 puts "Welcome #{player1.name}"
 
 #set the player's initial budget, only integer for now
 puts 'What\'s your budget?'
+trys = 0
 begin
+  trys += 1
   player1.budget = Integer(gets.chomp)
 rescue StandardError => e
+  system 'clear' if trys > 0
   puts 'budget must be a integer number, please try again'
   retry
 end
 
+trys = 0
+system 'clear' if player1.budget
 #set the game's number of decks, only integer for now
 puts "How many decks shall we use #{player1.name}?"
 begin
+  trys += 1
   deck = Deck.new(Integer(gets.chomp))
 rescue StandardError => e
+  system 'clear' if trys > 0
   puts 'the number of decks must be a integer number, please try again'
   retry
 end
-binding.pry
+# binding.pry
+system 'clear' if deck
 puts "Sweet, we\'ll play with #{deck.number_of_decks} decks"
 
 #game begins
 puts "let\'s start!"
+system 'clear' if gets.chomp
+#I forgot to consider the bet and the whole settings have to be configure in a class
+#the following loop is sh*t
+
+# while player1.budget > 0 do
+#   puts 'Dealing the cards'
+#   deck.deal(player1.hand)
+#   player1.hand[0].output_card
+#   system 'clear' if gets.chomp
+#   deck.deal(house.hand)
+#   puts 'first card of the house is covered'
+#   system 'clear' if gets.chomp
+#   deck.deal(player1.hand)
+#   player1.hand[1].output_card
+#   deck.deal(house.hand)
+#   puts 'the second card of the house is'
+#   house.hand[1].output_card
+# end

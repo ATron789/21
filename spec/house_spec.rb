@@ -9,11 +9,11 @@ describe House do
   context 'receiving cards from Deck(s)' do
     let(:deck) {Deck.new}
     it 'has a 2 cards from a deck' do
-      2.times {subject.hand << deck.deal}
+      2.times {deck.deal(subject.hand)}
       expect(subject.hand.length).to eq 2
     end
     it 'the hand has a value > 0' do
-      2.times {subject.hand << deck.deal}
+      2.times {deck.deal(subject.hand)}
       expect(subject.hand.inject { |x,sum| x.value + sum.value}).to be_between(1, 21)
     end
   end
