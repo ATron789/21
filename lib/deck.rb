@@ -17,7 +17,12 @@ class Deck
     end
   @cards.shuffle!
   end
-
+  def self.build(gamesets)
+    deck = self.new
+    deck.number_of_decks = gamesets.decks
+    #why do I need this?
+    deck
+  end
   def deal(a)
     a << @cards.shift
   end

@@ -8,4 +8,11 @@ class Player < Hand
     @name = name
     @budget = budget
   end
+  def self.build(gamesets)
+    player1 = self.new
+    player1.name = gamesets.player_name
+    player1.budget = gamesets.player_budget
+    #why do I need this?
+    player1
+  end
 end

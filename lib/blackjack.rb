@@ -55,20 +55,3 @@ puts "Sweet, we\'ll play with #{deck.number_of_decks} decks"
 #game begins
 puts "let\'s start!"
 system 'clear' if gets.chomp
-#I forgot to consider the bet and the whole settings have to be configure in a class
-#the following loop is sh*t
-
-# while player1.budget > 0 do
-#   puts 'Dealing the cards'
-#   deck.deal(player1.hand)
-#   player1.hand[0].output_card
-#   system 'clear' if gets.chomp
-#   deck.deal(house.hand)
-#   puts 'first card of the house is covered'
-#   system 'clear' if gets.chomp
-#   deck.deal(player1.hand)
-#   player1.hand[1].output_card
-#   deck.deal(house.hand)
-#   puts 'the second card of the house is'
-#   house.hand[1].output_card
-# end
