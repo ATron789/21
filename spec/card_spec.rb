@@ -1,27 +1,29 @@
 require 'set'
 require 'card'
 describe Card do
+  let (:suits) {['H', 'C', 'S', 'D']}
+  let (:ranks) {[*(2..10), 'J', 'Q', 'K', 'A']}
   def card(params = {})
-    defaults = {rank: 7, suit: '♥'}
+    defaults = {rank: 7, suit: 'H'}
     Card.new(**defaults.merge(params))
   end
   it 'has a rank' do
-    raise unless card.rank == 7
+    expect(ranks.include? card.rank).to be true
   end
   it 'has a suit' do
-    raise unless card.suit == '♥'
+    expect(suits.include? card.suit).to eq true
   end
   it 'has a value that equals the rank' do
     expect(card.value).to eq 7
   end
   it 'face cards value equals 10' do
-    expect(card(rank: 'K',suit:'♣').value).to eq 10
+    expect(card(rank: 'K').value).to eq 10
   end
   context 'equality' do
-    subject {card(suit: '♣', rank: 4)}
+    subject {card(suit: 'C', rank: 4)}
 
     describe 'comparing against iself' do
-      let(:other) {card(suit: '♣', rank: 4)}
+      let(:other) {card(suit: 'C', rank: 4)}
 
       it 'is equal to itself' do
         raise unless subject == other
@@ -41,11 +43,11 @@ describe Card do
     end
 
     describe 'comparing to a card of different suit' do
-      let(:other) {card(suit: '♥', rank: 4)}
+      let(:other) {card(suit: 'H', rank: 4)}
       it_behaves_like 'an unequal card'
     end
     describe 'comparing to a card of different rank' do
-      let(:other) {card(suit: '♣', rank: 8)}
+      let(:other) {card(suit: 'C', rank: 8)}
       it_behaves_like 'an unequal card'
     end
   end

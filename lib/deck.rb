@@ -4,7 +4,7 @@ class Deck
   attr_accessor :number_of_decks
   def initialize(number_of_decks = 1)
     @ranks = [*(2..10), 'J', 'Q', 'K', 'A']
-    @suits = ['♣', '♥', '♠', '♦']
+    @suits = ['C', 'H', 'S', 'D']
     @cards = []
     @number_of_decks = number_of_decks
 
@@ -15,7 +15,7 @@ class Deck
         end
       end
     end
-  @cards.shuffle!
+    @cards.shuffle!
   end
   def self.build(gamesets)
     deck = self.new

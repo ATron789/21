@@ -1,12 +1,14 @@
 require 'deck'
 
 describe Deck do
-  subject {Deck.new.cards}
-  it 'is a full deck of 52 cards' do
-    raise unless subject.length == 52
-  end
-  it 'has all different cards' do
-    raise unless subject.uniq.length == subject.length
+  context 'one deck scenario' do
+    subject {Deck.new.cards}
+    it 'is a full deck of 52 cards' do
+      expect(subject.length).to eq 52
+    end
+    it 'has all different cards' do
+      raise unless subject.uniq.length == subject.length
+    end
   end
   context 'More than one deck' do
     subject {Deck.new (2)}

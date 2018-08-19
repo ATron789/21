@@ -5,10 +5,10 @@ require 'deck'
 describe Hand do
   subject {Hand.new}
   it 'is a empty hand' do
-    raise unless subject.hand == []
+    expect(subject.hand).to eq []
   end
   context 'holds cards' do
-    let(:card) {Card.new(suit: '♣', rank: 4)}
+    let(:card) {Card.new(suit: 'C', rank: 4)}
     let(:hand_value) {Array.new}
     it 'has a card' do
       subject.hand << card
