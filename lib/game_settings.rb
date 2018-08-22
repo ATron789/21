@@ -1,3 +1,4 @@
+require_relative 'card'
 require_relative 'deck'
 require_relative 'player'
 require_relative 'house'
@@ -28,7 +29,7 @@ class GameSettings
     end
   end
 #the following function is for test purposes.
-#For recursive function  
+#For recursive function
   def budget_input2(attempted = false)
     system 'clear' if attempted
     message = attempted ?

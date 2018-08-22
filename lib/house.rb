@@ -4,7 +4,7 @@ require_relative 'hand'
 
 class House < Hand
   attr_accessor :name
-  def initialize(name = 'House', hand = [])
+  def initialize(name = 'The House', hand = [])
     super(hand)
     @name = name
   end

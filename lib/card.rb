@@ -27,6 +27,6 @@ class Card
   end
   #this def is totally useless, I am keeping for now
   def output_card
-    puts "The #{@rank} of #{@suit}"
+    return "The #{@rank} of #{@suit}"
   end
 end
