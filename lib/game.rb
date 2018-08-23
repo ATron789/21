@@ -1,5 +1,5 @@
 require_relative 'game_settings'
-
+require 'pry'
 class Game
   attr_accessor :player, :house, :bet
   attr_reader :deck
@@ -15,7 +15,7 @@ class Game
 
     loop do
       begin
-        @bet = Integer(gets.chomp)
+      @bet = Integer(gets.chomp)
       rescue StandardError => e
         system 'clear'
         puts 'budget must be a integer number, please try again'
@@ -33,14 +33,17 @@ class Game
   end
 
   def deal_the_cards
-    @deck.deal(@player.hand)
-    puts "#{@player.name}\'s first card is #{@player.hand[0].output_card}"
-    @deck.deal(@house.hand)
-    puts "#{@house.name}\'s first card is covered"
-    @deck.deal(@player.hand)
-    puts "#{@player.name}\'s second card is #{@player.hand[1].output_card}"
-    @deck.deal(@house.hand)
-    puts "#{@house.name}\'s  card is #{@house.hand[1].output_card}"
+    deck.deal(player.hand)
+    puts "#{player.name}\'s first card is #{player.hand[0].output_card}"
+    deck.deal(house.hand)
+    puts "#{house.name}\'s first card is covered"
+    deck.deal(player.hand)
+    puts "#{player.name}\'s second card is #{player.hand[1].output_card}"
+    deck.deal(house.hand)
+    puts "#{house.name}\'s card is #{house.hand[1].output_card}"
+    
+    binding.pry
+
   end
 
 

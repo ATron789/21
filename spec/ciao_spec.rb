@@ -3,7 +3,6 @@ describe Message do
   subject {Message.new}
   let(:a) {'ciao'}
   it 'changes' do
-    subject.cambia(a)
-    expect(subject.name).to eq 'ciao'
+    expect {subject.cambia()}.to raise_error(ArgumentError)
   end
 end

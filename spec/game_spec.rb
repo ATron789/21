@@ -9,17 +9,16 @@ describe Game do
   let(:deck)  {Deck.new}
 
   subject {Game.new(player, house, deck)}
-
-  it 'has a bet input' do
-    allow(subject).to receive(:gets).and_return("200\n")
-    subject.bet_input
-    expect(subject.bet).to eq 200
-  end
-  #check recursive method to get out of the loop
-  it 'has to raise a error if bet is not valid' do
-    allow(subject).to receive(:gets).and_return("200000\n")
-    subject.bet_input
-    expect(subject.bet_input).to raise_error
+  context 'Bet input' do
+    it 'has a bet input' do
+      allow(subject).to receive(:gets).and_return("ciao\n", "2000\n", "200\n")
+      subject.bet_input
+      expect(subject.bet).to eq 200
+    end
+    # it 'has to raise a error if bet is not valid' do
+    #   allow(subject).to receive(:gets).and_return("ciao\n")
+    #   expect{subject.bet_input}.to raise_error(ArgumentError)
+    # end
   end
 
 
