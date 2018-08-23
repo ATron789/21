@@ -16,7 +16,7 @@ class Game
     loop do
       begin
       @bet = Integer(gets.chomp)
-      rescue StandardError => e
+    rescue ArgumentError => e
         system 'clear'
         puts 'budget must be a integer number, please try again'
         retry
@@ -41,7 +41,7 @@ class Game
     puts "#{player.name}\'s second card is #{player.hand[1].output_card}"
     deck.deal(house.hand)
     puts "#{house.name}\'s card is #{house.hand[1].output_card}"
-    
+
     binding.pry
 
   end
