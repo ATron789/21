@@ -1,4 +1,5 @@
 require 'game_settings'
+require 'pry'
 
 describe GameSettings do
   before(:each) do
@@ -27,10 +28,27 @@ describe GameSettings do
       expect(subject.decks).to eq 3
     end
 
+    # context 'decks_input raises an error' do
+    #   # before do
+    #   #   allow(subject.bet_input).to receive(:gets).and_raise(ArgumentError)
+    #   # end
+    #
+    #   it 'has to raise a error if decks input is not valid' do
+    #     allow(subject).to receive(:decks_input).and_raise(ArgumentError)
+    #     allow(subject).to receive(:gets).and_return("ciao\n")
+    #     # subject.bet_input
+    #     # binding.pry
+    #     expect{ subject.decks_input }.to raise_error(ArgumentError)
+    #   end
+    #   #it just forces the method to raise an error
+    
+
+
   end
   context 'GameSettings set player\'s attributes' do
     subject {GameSettings.new('foo', 200, 3)}
     let(:player1) {Player.build(subject)}
+    # binding.pry
     it 'sets player\'s name' do
       expect(player1.name).to eq 'foo'
     end

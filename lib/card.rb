@@ -29,4 +29,20 @@ class Card
   def output_card
     return "The #{@rank} of #{@suit}"
   end
+
+  def ace_check
+    if @rank == 'A'
+      puts 'how much would your Ace worth? press [1] for 1, press [2] for 11'
+      choice = gets.chomp
+      if choice == '1'
+        @value = 1
+      elsif choice == '2'
+        @value = 11
+      else
+        puts 'wrong input, try again'
+        ace_check
+      end
+    end
+  end
+
 end

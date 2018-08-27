@@ -51,4 +51,24 @@ describe Card do
       it_behaves_like 'an unequal card'
     end
   end
+
+  context 'changing the Ace value' do
+    subject {card(rank: 'A')}
+    it 'changes the value to 11' do
+      allow(subject).to receive(:gets).and_return("2\n")
+      subject.ace_check
+      expect(subject.value).to eq 11
+    end
+    it 'changes the value to 11' do
+      allow(subject).to receive(:gets).and_return("1\n")
+      subject.ace_check
+      expect(subject.value).to eq 1
+    end
+  end
+  # it 'it accepts only the right bet: Integer and less than player budget' do
+  #   allow(subject).to receive(:gets).and_return("ciao\n", "2000\n", "20\n")
+  #   subject.bet_input
+  #   expect(subject.bet).to eq 20
+  #   # binding.pry
+  # end
 end

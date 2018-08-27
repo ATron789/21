@@ -22,7 +22,7 @@ class GameSettings
     puts 'What\'s your budget?'
     begin
       @player_budget = Integer(gets.chomp)
-    rescue StandardError => e
+    rescue ArgumentError
       system 'clear'
       puts 'budget must be a integer number, please try again'
       retry
@@ -37,7 +37,7 @@ class GameSettings
       'What\'s your budget?'
     puts message
     @player_budget = Integer(gets.chomp)
-    rescue StandardError => e
+    rescue ArgumentError
       budget_input2(true)
   end
 
@@ -46,7 +46,7 @@ class GameSettings
     puts "How many decks shall we use #{@player_name}?"
     begin
       @decks = Integer(gets.chomp)
-    rescue StandardError => e
+    rescue ArgumentError
       system 'clear'
       puts 'the number of decks must be a integer number, please try again'
       retry
