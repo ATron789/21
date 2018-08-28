@@ -30,16 +30,16 @@ class GameSettings
   end
 #the following function is for test purposes.
 #For recursive function
-  def budget_input2(attempted = false)
-    system 'clear' if attempted
-    message = attempted ?
-      'budget must be a integer number, please try again' :
-      'What\'s your budget?'
-    puts message
-    @player_budget = Integer(gets.chomp)
-    rescue ArgumentError
-      budget_input2(true)
-  end
+  # def budget_input2(attempted = false)
+  #   system 'clear' if attempted
+  #   message = attempted ?
+  #     'budget must be a integer number, please try again' :
+  #     'What\'s your budget?'
+  #   puts message
+  #   @player_budget = Integer(gets.chomp)
+  #   rescue ArgumentError
+  #     budget_input2(true)
+  # end
 
 
   def decks_input

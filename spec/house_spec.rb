@@ -1,20 +1,11 @@
 require 'house'
-require 'deck'
+require 'hand'
 
 describe House do
-  subject {House.new}
+  let(:hand) {Hand.new}
+  subject {House.new(hand: hand)}
+
   it 'the house has an empty hand' do
-    expect(subject.hand).to eq Array.new
-  end
-  context 'receiving cards from Deck(s)' do
-    let(:deck) {Deck.new}
-    it 'has a 2 cards from a deck' do
-      2.times {deck.deal(subject.hand)}
-      expect(subject.hand.length).to eq 2
-    end
-    it 'the hand has a value > 0' do
-      2.times {deck.deal(subject.hand)}
-      expect(subject.hand.inject { |x,sum| x.value + sum.value}).to be_between(1, 21)
-    end
+    expect(subject.hand).to eq hand
   end
 end

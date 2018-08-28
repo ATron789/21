@@ -1,12 +1,12 @@
 require_relative 'hand'
 #this class defines the actual player, inheriting the hand instance from the Hand class.
 #it has also a name and budget instance
-class Player < Hand
-  attr_accessor :name, :budget
-  def initialize(name = 'Player', hand = [], budget = 0)
-    super(hand)
+class Player
+  attr_accessor :name, :budget, :hand
+  def initialize(name: 'Player', budget: 0, hand: nil)
     @name = name
     @budget = budget
+    @hand  = hand
   end
   def self.build(gamesets)
     player1 = self.new
