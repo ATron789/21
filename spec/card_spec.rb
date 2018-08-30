@@ -26,19 +26,19 @@ describe Card do
       let(:other) {card(suit: 'C', rank: 4)}
 
       it 'is equal to itself' do
-        raise unless subject == other
+        expect(subject).to eq other
       end
       it 'is hash equal to itself' do
-        raise unless Set.new([subject, other]).size == 1
+        expect(Set.new([subject, other]).size).to eq 1
       end
     end
 
     shared_examples_for 'an unequal card' do
       it 'is not equal' do
-        raise unless subject != other
+        expect(subject).to_not eq other
       end
       it 'is not hash equal' do
-        raise unless Set.new([subject, other]).size == 2
+        expect(Set.new([subject, other]).size).to eq 2
       end
     end
 
@@ -51,20 +51,10 @@ describe Card do
       it_behaves_like 'an unequal card'
     end
   end
-
-  # context 'changing the Ace value' do
-  #   subject {card(rank: 'A')}
-  #   it 'changes the value to 11' do
-  #     allow(subject).to receive(:gets).and_return("2\n")
-  #     subject.ace_check
-  #     expect(subject.value).to eq 11
-  #   end
-  #   it 'changes the value to 11' do
-  #     allow(subject).to receive(:gets).and_return("1\n")
-  #     subject.ace_check
-  #     expect(subject.value).to eq 1
-  #   end
-  # end
-
-
+  context 'card output' do
+    subject {card(suit: 'C', rank: 4)}
+    it 'shows a card' do
+      expect(subject.output_card). to match ("The #{subject.rank} of #{subject.suit}")
+    end
+  end
 end

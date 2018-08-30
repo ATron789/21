@@ -7,7 +7,7 @@ class Game
     @player = player
     @house = house
     @deck = deck
-    @bet = 0
+    @bet = nil
   end
 
   def bet_input
@@ -28,13 +28,13 @@ class Game
   end
 
   def deal_the_cards
-      deck.deal(player.hand)
-      puts "#{player.name}\'s first card is #{player.hand[0].output_card}"
-      deck.deal(house.hand)
+      deck.deal(player.hand.cards)
+      puts "#{player.name}\'s first card is #{player.hand.cards[0].output_card}"
+      deck.deal(house.hand.cards)
       puts "#{house.name}\'s first card is covered"
-      deck.deal(player.hand)
-      puts "#{player.name}\'s second card is #{player.hand[1].output_card}"
-      deck.deal(house.hand)
-      puts "#{house.name}\'s card is #{house.hand[1].output_card}"
+      deck.deal(player.hand.cards)
+      puts "#{player.name}\'s second card is #{player.hand.cards[1].output_card}"
+      deck.deal(house.hand.cards)
+      puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
   end
 end

@@ -4,8 +4,8 @@ require_relative 'hand'
 
 class House
   attr_accessor :name, :hand
-  def initialize(name: 'The House', hand: nil)
-    @hand = hand
+  def initialize(name: 'The House')
+    @hand = Hand.new
     @name = name
   end
 end

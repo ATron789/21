@@ -3,10 +3,10 @@ require_relative 'hand'
 #it has also a name and budget instance
 class Player
   attr_accessor :name, :budget, :hand
-  def initialize(name: 'Player', budget: 0, hand: nil)
+  def initialize(name: 'Player', budget: 0)
     @name = name
     @budget = budget
-    @hand  = hand
+    @hand  = Hand.new
   end
   def self.build(gamesets)
     player1 = self.new

@@ -3,9 +3,9 @@ require 'hand'
 
 describe House do
   let(:hand) {Hand.new}
-  subject {House.new(hand: hand)}
+  subject {House.new}
 
   it 'the house has an empty hand' do
-    expect(subject.hand).to eq hand
+    expect(subject.hand.cards).to eq hand.cards
   end
 end

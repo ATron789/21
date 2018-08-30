@@ -17,13 +17,13 @@ describe GameSettings do
       subject.name_input
       expect(subject.player_name).to eq "Player"
     end
-    it 'receives a budget input' do
-      allow(subject).to receive(:gets).and_return("200\n")
+    it 'accepts only the correct budget input' do
+      allow(subject).to receive(:gets).and_return("ciao\n", "200\n")
       subject.budget_input
       expect(subject.player_budget).to eq 200
     end
-    it 'receives a number of decks input' do
-      allow(subject).to receive(:gets).and_return("3\n")
+    it 'accepts only the correct input' do
+      allow(subject).to receive(:gets).and_return("ciao\n", "3\n")
       subject.decks_input
       expect(subject.decks).to eq 3
     end
@@ -41,7 +41,7 @@ describe GameSettings do
     #     expect{ subject.decks_input }.to raise_error(ArgumentError)
     #   end
     #   #it just forces the method to raise an error
-    
+
 
 
   end
