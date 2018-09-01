@@ -8,4 +8,8 @@ class House
     @hand = Hand.new
     @name = name
   end
+
+  def bust?
+    @hand.hand_value > 21
+  end
 end

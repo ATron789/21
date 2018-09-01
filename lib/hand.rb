@@ -9,8 +9,8 @@ class Hand
     @cards  = cards
   end
   def hand_value
-    binding.pry
-    @cards.inject { |card,sum| card.value + sum.value}
+
+    @cards.inject(0) { |sum,card| sum + card.value}
   end
 
   def ace_check

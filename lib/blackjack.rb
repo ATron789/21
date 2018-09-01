@@ -43,11 +43,11 @@ new_game = Game.new(player, house, deck)
 
 # new_game.bet_input
 
-until (player.hand.hand_value > 21) do
-  new_game.deal_the_cards
+until (player.bust?) || (house.bust?) do
+  new_game.deal_one_card
 end
 
-if player.hand.hand_value > 21
+if player.bust?
   puts "#{player.name} busted"
 else
   puts "#{house.name} busted"
