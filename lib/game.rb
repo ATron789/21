@@ -37,4 +37,11 @@ class Game
       deck.deal(house.hand.cards)
       puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
   end
+
+  # def hit_or_stand(player)
+  # 
+  #   choice = gets.chomp
+  #   puts 'hit or stand? press h to hit or press s to stand'
+  # case choice
+  # when
 end

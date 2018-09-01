@@ -9,7 +9,6 @@ describe Hand do
   end
   context 'holds cards' do
     let(:card) {Card.new(suit: 'C', rank: 4)}
-    let(:cards_value) {Array.new}
     it 'has a card' do
       subject.cards << card
       expect(subject.cards.length).to eq 1
@@ -32,4 +31,11 @@ describe Hand do
     end
   end
 
+  context 'ace checker' do
+    let(:card) {Card.new(suit: 'C', rank: 'A')}
+    it 'the hand has an ACE' do
+      subject.cards << card
+      expect(subject.ace_check).to be true
+    end
+  end
 end
