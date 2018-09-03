@@ -32,10 +32,16 @@ describe Hand do
   end
 
   context 'ace checker' do
-    let(:card) {Card.new(suit: 'C', rank: 'A')}
+    let(:ace_card) {Card.new(suit: 'C', rank: 'A')}
+    let(:not_ace_card) {Card.new(suit: 'C', rank: '8')}
+
     it 'the hand has an ACE' do
-      subject.cards << card
+      subject.cards << ace_card
       expect(subject.ace_check).to be true
+    end
+    it 'the hand does not have an ACE' do
+      subject.cards << not_ace_card
+      expect(subject.ace_check).to be false
     end
   end
 end

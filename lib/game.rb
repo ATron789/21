@@ -1,5 +1,6 @@
 require_relative 'game_settings'
 require 'pry'
+
 class Game
   attr_accessor :player, :house, :bet
   attr_reader :deck
@@ -45,11 +46,38 @@ class Game
     puts "#{house.name} got  #{house.hand.cards[-1].output_card}"
   end
 
+  def hit_or_stand
+    puts 'press h for hit or press s for stand'
+    choice = gets.chomp.downcase
+    case choice
+    when 'h' then
+      deck.deal(player.hand.cards)
+      puts "#{player.name} got  #{player.hand.cards[-1].output_card}"
+      if player.bust?
+        puts "#{player.name} busted! The House wins!"
+      else
+        hit_or_stand
+      end
+    when 's' then
+      puts 'you stand'
+    else
+      'invalid input, try again'
+      hit_or_stand
+    end
+  end
 
-  # def hit_or_stand(player)
-  #
-  #   choice = gets.chomp
-  #   puts 'hit or stand? press h to hit or press s to stand'
-  # case choice
-  # when
+  def house_ai
+    if house.hand.hand_value < player.hand.hand_value && house.hand.hand_value < 17
+      deck.deal(house.hand.cards)
+      if house.bust?
+        "puts The House Busted!"
+      else
+        house_ai
+      end
+    else
+      puts "#{house.name} stands"
+    end
+  end
+
+
 end

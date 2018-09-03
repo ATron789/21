@@ -43,15 +43,19 @@ new_game = Game.new(player, house, deck)
 
 # new_game.bet_input
 
-until (player.bust?) || (house.bust?) do
-  new_game.deal_one_card
-end
+# until (player.bust?) || (house.bust?) do
+#   new_game.deal_one_card
+# end
+#
+# if player.bust?
+#   puts "#{player.name} busted"
+# else
+#   puts "#{house.name} busted"
+# end
 
-if player.bust?
-  puts "#{player.name} busted"
-else
-  puts "#{house.name} busted"
-end
-
+new_game.deal_the_cards
+new_game.hit_or_stand
+new_game.house_ai
+binding.pry
 puts player.hand.hand_value
 puts house.hand.hand_value
