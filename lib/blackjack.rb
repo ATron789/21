@@ -55,6 +55,7 @@ new_game = Game.new(player, house, deck)
 
 new_game.deal_the_cards
 new_game.hit_or_stand
+binding.pry
 new_game.house_ai
 binding.pry
 puts player.hand.hand_value

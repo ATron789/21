@@ -20,4 +20,9 @@ class Player
   def bust?
     @hand.hand_value > 21
   end
+  def show_cards
+    @hand.cards.each do |card|
+      puts card.output_card
+    end
+  end
 end

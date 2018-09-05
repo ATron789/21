@@ -47,12 +47,14 @@ class Game
   end
 
   def hit_or_stand
+
     puts 'press h for hit or press s for stand'
     choice = gets.chomp.downcase
     case choice
     when 'h' then
       deck.deal(player.hand.cards)
-      puts "#{player.name} got  #{player.hand.cards[-1].output_card}"
+      player.show_cards
+      # puts "#{player.name} got  #{player.hand.cards[-1].output_card}"
       if player.bust?
         puts "#{player.name} busted! The House wins!"
       else
@@ -67,17 +69,6 @@ class Game
   end
 
   def house_ai
-    if house.hand.hand_value < player.hand.hand_value && house.hand.hand_value < 17
-      deck.deal(house.hand.cards)
-      if house.bust?
-        "puts The House Busted!"
-      else
-        house_ai
-      end
-    else
-      puts "#{house.name} stands"
-    end
   end
-
 
 end
