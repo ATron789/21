@@ -22,7 +22,7 @@ describe GameSettings do
       subject.budget_input
       expect(subject.player_budget).to eq 200
     end
-    it 'accepts only the correct input' do
+    it 'accepts only the correct deck input' do
       allow(subject).to receive(:gets).and_return("ciao\n", "3\n")
       subject.decks_input
       expect(subject.decks).to eq 3

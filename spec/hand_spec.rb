@@ -8,10 +8,15 @@ describe Hand do
     expect(subject.cards).to eq []
   end
   context 'holds cards' do
+    before(:each) do
+      subject.cards << card
+    end
     let(:card) {Card.new(suit: 'C', rank: 4)}
     it 'has a card' do
-      subject.cards << card
       expect(subject.cards.length).to eq 1
+    end
+    it 'shows the cards' do
+      expect{subject.show_cards}.to output("The #{card.rank} of #{card.suit}\n").to_stdout
     end
   end
 
@@ -44,4 +49,5 @@ describe Hand do
       expect(subject.ace_check).to be false
     end
   end
+
 end

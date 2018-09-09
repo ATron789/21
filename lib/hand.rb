@@ -22,4 +22,9 @@ class Hand
       end
     end
   end
+  def show_cards
+    @cards.each do |card|
+      puts card.output_card
+    end
+  end
 end

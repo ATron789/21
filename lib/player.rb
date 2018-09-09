@@ -16,13 +16,7 @@ class Player
     #why do I need this?
     player1
   end
-
   def bust?
     @hand.hand_value > 21
-  end
-  def show_cards
-    @hand.cards.each do |card|
-      puts card.output_card
-    end
   end
 end
