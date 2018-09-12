@@ -82,11 +82,28 @@ describe Game do
         end
       end
       context 'bet' do
-        it 'player wins' do
+        it 'player wins, gets the bet' do
+          initial_pbudget = player.budget
           subject.bet = 20
-          allow(subject).to receive(:winner).and_return(1)
+          # subject.deal_the_cards
+          allow(player.hand).to receive(:hand_value).and_return(18)
+          allow(house.hand).to receive(:hand_value).and_return(17)
           subject.winner
-          expect(player.budget).to eq player.budget + 20
+          binding.pry
+          expect(player.budget).to eq initial_pbudget += subject.bet
+          # expect(player.budget).to_not eq initial_pbudget
+        end
+
+        it 'house wins, players loses the bet' do
+          initial_pbudget = player.budget
+          subject.bet = 20
+          # subject.deal_the_cards
+          allow(player.hand).to receive(:hand_value).and_return(17)
+          allow(house.hand).to receive(:hand_value).and_return(18)
+          subject.winner
+          binding.pry
+          expect(player.budget).to eq initial_pbudget -= subject.bet
+          # expect(player.budget).to_not eq initial_pbudget
         end
 
       end

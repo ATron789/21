@@ -58,4 +58,3 @@ new_game.hit_or_stand
 new_game.house_logic
 puts player.hand.hand_value
 puts house.hand.hand_value
-new_game.winner

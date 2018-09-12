@@ -86,6 +86,7 @@ class Game
     elsif house.hand.hand_value == player.hand.hand_value
       puts "#{house.name} got"
       house.hand.show_cards
+      puts
       puts "it\' a tie!"
     else
       if house.hand.hand_value < player.hand.hand_value || house.hand.hand_value < 17
@@ -94,7 +95,8 @@ class Game
         puts
         puts "#{house.name} hits"
         deck.deal(house.hand.cards)
-        puts "#{house.name} receives #{house.hand.cards[-1].output_card} "
+        puts "#{house.name} receives #{house.hand.cards[-1].output_card}"
+        puts
         house_logic
       # elsif house.hand.hand_value < 17
       #   deck.deal(house.hand.cards)
@@ -104,13 +106,17 @@ class Game
       end
     end
   end
-  
+
   def winner
-    case player.hand_value <=> house.hand.hand_value
+    case player.hand.hand_value <=> house.hand.hand_value
     when 1 then player.budget += @bet
       puts "#{player.name} wins #{@bet}"
-    when -1 then player.buget -= @bet
-      puts "#{players.name} loses #{@bet}"
+    when -1 then player.budget -= @bet
+      puts "#{player.name} loses #{@bet}"
     end
   end
+
+  def gameover?
+    player.budget == 0
+  ends
 end
