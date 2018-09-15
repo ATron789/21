@@ -12,6 +12,14 @@ class Game
     @player_hits = 0
   end
 
+  def play
+    bet_input
+    deal_the_cards
+    hit_or_stand
+    house_logic
+    winner
+  end
+
   def bet_input
     puts 'What\'s your bet?'
     begin
@@ -22,7 +30,7 @@ class Game
         bet_input
     end
 
-    if bet >= player.budget
+    if bet > player.budget
         #why this work even if player is not called as instance variable
         puts 'the bet cannot be bigger than the user budget, try again'
         bet_input
@@ -113,10 +121,12 @@ class Game
       puts "#{player.name} wins #{@bet}"
     when -1 then player.budget -= @bet
       puts "#{player.name} loses #{@bet}"
+    when 0 then nil
+      put "Bets are null"
     end
   end
 
   def gameover?
     player.budget == 0
-  ends
+  end
 end

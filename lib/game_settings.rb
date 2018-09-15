@@ -12,6 +12,13 @@ class GameSettings
     @decks = decks
   end
 
+  def set_up
+    binding.pry
+    name_input
+    budget_input
+    decks_input
+  end
+
   def name_input
     puts 'What should I call you'
     user_name = gets.chomp

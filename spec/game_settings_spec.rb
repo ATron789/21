@@ -27,24 +27,8 @@ describe GameSettings do
       subject.decks_input
       expect(subject.decks).to eq 3
     end
-
-    # context 'decks_input raises an error' do
-    #   # before do
-    #   #   allow(subject.bet_input).to receive(:gets).and_raise(ArgumentError)
-    #   # end
-    #
-    #   it 'has to raise a error if decks input is not valid' do
-    #     allow(subject).to receive(:decks_input).and_raise(ArgumentError)
-    #     allow(subject).to receive(:gets).and_return("ciao\n")
-    #     # subject.bet_input
-    #     # binding.pry
-    #     expect{ subject.decks_input }.to raise_error(ArgumentError)
-    #   end
-    #   #it just forces the method to raise an error
-
-
-
   end
+
   context 'GameSettings set player\'s attributes' do
     subject {GameSettings.new('foo', 200, 3)}
     let(:player1) {Player.build(subject)}
@@ -61,6 +45,16 @@ describe GameSettings do
     subject {GameSettings.new('foo', 200, 3)}
     it 'set\'s the number of decks' do
       expect(deck.number_of_decks).to eq 3
+    end
+  end
+  context 'valid input' do
+    let(:settings) {GameSettings.new}
+    it 'creats object with valid player name'do
+      allow(settings).to receive(:gets).and_return("ciao\n", "2000\n", "2\n")
+      settings.set_up
+      expect(settings.player_name).to eq 'ciao'
+      expect(settings.player_budget).to eq 2000
+      expect(settings.decks).to eq 2
     end
   end
 end
