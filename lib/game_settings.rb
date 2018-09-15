@@ -13,50 +13,61 @@ class GameSettings
   end
 
   def set_up
-    binding.pry
+    # binding.pry
     name_input
     budget_input
     decks_input
+    puts "let\'s start!"
+    puts 'press any key to continue'
+    system 'clear' if gets.chomp
   end
+#I will implement this with the via the InputReader Class
+  # def set_up(inputs)
+  #   @player_name = inputs.name
+  #   @player_budget = inputs.budget
+  #   @decks = inputs.decks
+  # end
 
   def name_input
     puts 'What should I call you'
     user_name = gets.chomp
     @player_name = user_name unless user_name.empty?
+    puts
+    puts "Welcome #{@player_name}"
+    puts
   end
 
   def budget_input
     puts 'What\'s your budget?'
     begin
       @player_budget = Integer(gets.chomp)
-    rescue ArgumentError
+    rescue ArgumentError => e
       system 'clear'
       puts 'budget must be a integer number, please try again'
       retry
     end
+    puts
+    puts "Your budget is #{@player_budget}"
+    puts
   end
-#the following function is for test purposes.
-#For recursive function
-  # def budget_input2(attempted = false)
-  #   system 'clear' if attempted
-  #   message = attempted ?
-  #     'budget must be a integer number, please try again' :
-  #     'What\'s your budget?'
-  #   puts message
-  #   @player_budget = Integer(gets.chomp)
-  #   rescue ArgumentError
-  #     budget_input2(true)
-  # end
-
 
   def decks_input
     puts "How many decks shall we use #{@player_name}?"
+    puts "We can play with: 1, 2, 4, 6 or 8 decks "
+    puts "Please choose one of the above options"
     begin
-      @decks = Integer(gets.chomp)
+      decks_input = gets.chomp
+      @decks = Integer(decks_input)
+      raise ArgumentError unless [1, 2, 4, 6, 8].include? Integer(decks_input)
     rescue ArgumentError
       system 'clear'
-      puts 'the number of decks must be a integer number, please try again'
+      puts 'the number of decks must be a integer number and one of the following options:'
+      puts "1, 2, 4, 6 or 8"
       retry
     end
+    puts
+    puts "Ok #{@player_name}we\'ll play with #{@decks} decks"
+    puts
   end
+
 end

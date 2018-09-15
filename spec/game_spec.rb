@@ -57,13 +57,13 @@ describe Game do
         player_original_hand = player.hand.hand_value
         subject.house_logic
         if house_original_hand <= player_original_hand || house_original_hand < 17
-          binding.pry
+          # binding.pry
           expect(house.hand.cards.length).to_not eq 2
         elsif house_original_hand == player_original_hand && house_original_hand >= 17
-          binding.pry
+          # binding.pry
           expect(house.hand.cards.length).to eq 2
         else
-          binding.pry
+          # binding.pry
           expect(house.hand.cards.length).to eq 2
         end
       end
@@ -82,7 +82,7 @@ describe Game do
         end
       end
       context 'bet' do
-        it 'player wins, gets the bet' do
+        it 'player wins, player hand bigger than house' do
           initial_pbudget = player.budget
           subject.bet = 20
           allow(player.hand).to receive(:hand_value).and_return(18)
@@ -93,11 +93,34 @@ describe Game do
           # expect(player.budget).to_not eq initial_pbudget
         end
 
+        it 'player wins, house busted' do
+          initial_pbudget = player.budget
+          subject.bet = 20
+          allow(player.hand).to receive(:hand_value).and_return(18)
+          allow(house.hand).to receive(:hand_value).and_return(22)
+          allow(house).to receive(:bust?).and_return(true)
+          subject.winner
+          # binding.pry
+          expect(player.budget).to eq initial_pbudget += subject.bet
+        end
+
         it 'house wins, players loses the bet' do
           initial_pbudget = player.budget
           subject.bet = 20
           allow(player.hand).to receive(:hand_value).and_return(17)
           allow(house.hand).to receive(:hand_value).and_return(18)
+          subject.winner
+          # binding.pry
+          expect(player.budget).to eq initial_pbudget -= subject.bet
+          # expect(player.budget).to_not eq initial_pbudget
+        end
+
+        it 'house wins, players busted' do
+          initial_pbudget = player.budget
+          subject.bet = 20
+          allow(player.hand).to receive(:hand_value).and_return(22)
+          allow(house.hand).to receive(:hand_value).and_return(18)
+          allow(player).to receive(:bust?).and_return(true)
           subject.winner
           # binding.pry
           expect(player.budget).to eq initial_pbudget -= subject.bet

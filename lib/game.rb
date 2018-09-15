@@ -106,9 +106,6 @@ class Game
         puts "#{house.name} receives #{house.hand.cards[-1].output_card}"
         puts
         house_logic
-      # elsif house.hand.hand_value < 17
-      #   deck.deal(house.hand.cards)
-      #   house_logic
       else
         puts "#{house.name} stands and wins"
       end
@@ -116,13 +113,20 @@ class Game
   end
 
   def winner
-    case player.hand.hand_value <=> house.hand.hand_value
-    when 1 then player.budget += @bet
+    if house.bust?
+      player.budget += @bet
       puts "#{player.name} wins #{@bet}"
-    when -1 then player.budget -= @bet
+    elsif player.bust?
+      player.budget -= @bet
       puts "#{player.name} loses #{@bet}"
-    when 0 then nil
-      put "Bets are null"
+    elsif player.hand.hand_value > house.hand.hand_value
+      player.budget += @bet
+      puts "#{player.name} wins #{@bet}"
+    elsif player.hand.hand_value < house.hand.hand_value
+      player.budget -= @bet
+      puts "#{player.name} loses #{@bet}"
+    elsif player.hand.hand_value == house.hand.hand_value
+      puts "Bets are null"
     end
   end
 
