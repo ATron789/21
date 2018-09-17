@@ -1,6 +1,7 @@
 require_relative 'game_settings'
 require 'pry'
 
+
 class Game
   attr_accessor :player, :house, :bet, :player_hits
   attr_reader :deck
@@ -18,16 +19,26 @@ class Game
     hit_or_stand
     house_logic
     winner
+    player.hand.hand_reset
+    house.hand.hand_reset
+    if player.no_budget?
+      puts "#{player.name} run has no budget left, game over"
+    else
+      puts "new game, let\'s go. Press any key to continue"
+      system 'clear' if gets.chomp
+      play
+    end
   end
 
   def bet_input
     puts 'What\'s your bet?'
     begin
         @bet = Integer(gets.chomp)
+        raise ArgumentError unless Integer(@bet) != 0
       rescue ArgumentError
         system 'clear'
-        puts 'budget must be a integer number, please try again'
-        bet_input
+        puts 'bet must be an integer number greater than 0'
+        retry
     end
 
     if bet > player.budget
@@ -113,6 +124,18 @@ class Game
   end
 
   def winner
+    puts "#{player.name} got"
+    player.hand.show_cards
+    puts
+    puts "#{player.name}\' hand value:"
+    puts player.hand.hand_value
+    puts
+    puts "#{house.name} got"
+    house.hand.show_cards
+    puts
+    puts "#{house.name}\' hand value:"
+    puts house.hand.hand_value
+    puts
     if house.bust?
       player.budget += @bet
       puts "#{player.name} wins #{@bet}"
@@ -130,7 +153,5 @@ class Game
     end
   end
 
-  def gameover?
-    player.budget == 0
-  end
+
 end

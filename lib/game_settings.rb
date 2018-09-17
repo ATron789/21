@@ -36,14 +36,33 @@ class GameSettings
     puts "Welcome #{@player_name}"
     puts
   end
+  # def budget_input
+  #     puts 'What\'s your budget?'
+  #     begin
+  #       @player_budget = Integer(gets.chomp)
+  #     rescue ArgumentError => e
+  #       system 'clear'
+  #       puts 'budget must be a integer number, please try again'
+  #       retry
+  #     end
+  #     puts
+  #     puts "Your budget is #{@player_budget}"
+  #     puts
+  # end
 
+  #why the test gets stuck?
   def budget_input
     puts 'What\'s your budget?'
+    puts "You can choose between 5000, 10000, 20000 or 50000"
+    puts "Please choose one of the above options"
     begin
       @player_budget = Integer(gets.chomp)
+      raise ArgumentError unless [5000, 10000, 20000, 50000].include? @player_budget
     rescue ArgumentError => e
       system 'clear'
-      puts 'budget must be a integer number, please try again'
+      puts 'budget must be one of the following options:'
+      puts '5000, 10000, 20000 or 50000'
+      puts 'please try again'
       retry
     end
     puts

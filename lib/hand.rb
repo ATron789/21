@@ -27,4 +27,7 @@ class Hand
       puts card.output_card
     end
   end
+  def hand_reset
+    @cards = []
+  end
 end

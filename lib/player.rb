@@ -19,4 +19,7 @@ class Player
   def bust?
     @hand.hand_value > 21
   end
+  def no_budget?
+    @budget == 0
+  end
 end
