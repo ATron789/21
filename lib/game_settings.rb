@@ -36,19 +36,6 @@ class GameSettings
     puts "Welcome #{@player_name}"
     puts
   end
-  # def budget_input
-  #     puts 'What\'s your budget?'
-  #     begin
-  #       @player_budget = Integer(gets.chomp)
-  #     rescue ArgumentError => e
-  #       system 'clear'
-  #       puts 'budget must be a integer number, please try again'
-  #       retry
-  #     end
-  #     puts
-  #     puts "Your budget is #{@player_budget}"
-  #     puts
-  # end
 
   #why the test gets stuck?
   def budget_input
@@ -85,7 +72,7 @@ class GameSettings
       retry
     end
     puts
-    puts "Ok #{@player_name}we\'ll play with #{@decks} decks"
+    puts "Ok #{@player_name} we\'ll play with #{@decks} decks"
     puts
   end
 

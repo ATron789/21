@@ -92,7 +92,7 @@ class Game
       puts 'you stand'
       system 'clear'
     else
-      'invalid input, try again'
+      puts 'invalid input, try again'
       hit_or_stand
     end
   end
@@ -102,14 +102,10 @@ class Game
       nil
     elsif house.bust?
       puts "#{house.name} busted, #{player.name} wins"
-    elsif house.hand.hand_value == player.hand.hand_value
-      puts "#{house.name} got"
-      house.hand.show_cards
-      puts
-      puts "it\' a tie!"
     else
-      if house.hand.hand_value < player.hand.hand_value || house.hand.hand_value < 17
+      if  house.hand.hand_value < 17
         puts "#{house.name} hand is"
+        puts
         house.hand.show_cards
         puts
         puts "#{house.name} hits"
@@ -117,6 +113,21 @@ class Game
         puts "#{house.name} receives #{house.hand.cards[-1].output_card}"
         puts
         house_logic
+      elsif house.hand.hand_value < player.hand.hand_value
+        puts "#{house.name} hand is"
+        puts
+        house.hand.show_cards
+        puts
+        puts "#{house.name} hits"
+        deck.deal(house.hand.cards)
+        puts "#{house.name} receives #{house.hand.cards[-1].output_card}"
+        puts
+        house_logic
+      elsif house.hand.hand_value == player.hand.hand_value
+        puts "#{house.name} got"
+        house.hand.show_cards
+        puts
+        puts "it\' a tie!"
       else
         puts "#{house.name} stands and wins"
       end
@@ -151,6 +162,7 @@ class Game
     elsif player.hand.hand_value == house.hand.hand_value
       puts "Bets are null"
     end
+    puts "#{player.name} budget is #{player.budget}" unless player.no_budget?
   end
 
 

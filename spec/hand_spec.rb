@@ -4,24 +4,9 @@ require 'deck'
 
 describe Hand do
   subject {Hand.new}
-  it 'is a empty cards' do
-    expect(subject.cards).to eq []
-  end
-  context 'holds cards' do
-    before(:each) do
-      subject.cards << card
-    end
-    let(:card) {Card.new(suit: 'C', rank: 4)}
-    it 'has a card' do
-      expect(subject.cards.length).to eq 1
-    end
-    it 'shows the cards' do
-      expect{subject.show_cards}.to output("The #{card.rank} of #{card.suit}\n").to_stdout
-    end
-  end
+  let(:deck) {Deck.new}
 
   context 'from a deck' do
-    let(:deck) {Deck.new}
     it 'has a card from a deck' do
       deck.deal(subject.cards)
       expect(subject.cards.length).to eq 1
@@ -47,6 +32,14 @@ describe Hand do
     it 'the hand does not have an ACE' do
       subject.cards << not_ace_card
       expect(subject.ace_check).to be false
+    end
+  end
+
+  context 'reset' do
+    it 'drops the cards to start a new game' do
+      2.times {deck.deal(subject.cards)}
+      subject.hand_reset
+      expect(subject.cards).to eq []
     end
   end
 

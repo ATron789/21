@@ -16,4 +16,10 @@ describe Player do
     end
     expect(subject.bust?).to eq true
   end
+  context 'budget' do
+    it 'has no budget left' do
+      allow(subject).to receive(:budget).and_return(0)
+      expect(subject.no_budget?).to be true
+    end
+  end
 end

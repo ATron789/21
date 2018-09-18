@@ -18,9 +18,9 @@ describe GameSettings do
       expect(subject.player_name).to eq "Player"
     end
     it 'accepts only the correct budget input' do
-      allow(subject).to receive(:gets).and_return("ciao\n", "200\n")
+      allow(subject).to receive(:gets).and_return("ciao\n", "200\n", "5000\n")
       subject.budget_input
-      expect(subject.player_budget).to eq 200
+      expect(subject.player_budget).to eq 5000
     end
     it 'accepts only the correct deck input' do
       allow(subject).to receive(:gets).and_return("ciao\n", "3\n","9\n", "2\n")
@@ -50,10 +50,10 @@ describe GameSettings do
   context 'valid input' do
     let(:settings) {GameSettings.new}
     it 'creates object only with valid inputs 'do
-      allow(settings).to receive(:gets).and_return("Pippo\n","ciao\n", "2000\n", "ciao\n", "2\n")
+      allow(settings).to receive(:gets).and_return("Pippo\n","ciao\n", "5000\n", "ciao\n", "2\n")
       settings.set_up
       expect(settings.player_name).to eq 'Pippo'
-      expect(settings.player_budget).to eq 2000
+      expect(settings.player_budget).to eq 5000
       expect(settings.decks).to eq 2
     end
   end

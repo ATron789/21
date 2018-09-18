@@ -5,11 +5,10 @@ describe Game do
   before(:each) do
     allow($stdout).to receive(:write)
   end
+
   let(:deck)  {Deck.new}
   let(:player) {Player.new(budget: 200)}
   let(:house) {House.new}
-
-
   subject {Game.new(player, house, deck)}
 
   context  'it accepts the right input' do
@@ -49,87 +48,157 @@ describe Game do
       expect(player.hand.cards.length).to eq 2
     end
   end
+
   context 'house logic' do
-    context 'house hitting' do
-      it 'asks for a card if the house hand is less than player' do
-        subject.deal_the_cards
-        house_original_hand = house.hand.hand_value
-        player_original_hand = player.hand.hand_value
+
+    context 'house hitting, house hand value less than player' do
+      let (:cardH1) {Card.new(suit: 'C', rank: 10)}
+      let (:cardH2) {Card.new(suit: 'C', rank: 7)}
+      let (:cardP1) {Card.new(suit: 'C', rank: 10)}
+      let (:cardP2) {Card.new(suit: 'C', rank: 10)}
+      it 'hits because less than player' do
+        player.hand.cards << cardP1
+        player.hand.cards << cardP2
+        house.hand.cards << cardH1
+        house.hand.cards << cardH2
+        house_original_hand = house.hand.cards.length
         subject.house_logic
-        if house_original_hand <= player_original_hand || house_original_hand < 17
-          # binding.pry
-          expect(house.hand.cards.length).to_not eq 2
-        elsif house_original_hand == player_original_hand && house_original_hand >= 17
-          # binding.pry
-          expect(house.hand.cards.length).to eq 2
-        else
-          # binding.pry
-          expect(house.hand.cards.length).to eq 2
-        end
+        expect(house.hand.cards.length).to_not eq house_original_hand
       end
-      context 'house behaviour about busting' do
-        it 'Player busts house does nothing' do
-          allow(player).to receive(:bust?).and_return(true)
-          expect(subject.house_logic).to eq nil
-        end
-        it 'House busts, player wins' do
-          allow(house).to receive(:bust?).and_return(true)
-          expect{subject.house_logic}.to output("#{house.name} busted, #{player.name} wins\n").to_stdout
-        end
-        it 'tie scenario' do
-          player.hand = house.hand
-          expect{subject.house_logic}.to output{"#{house.name} got\n" ; house.hand.show_cards ; "it\' a tie!"}.to_stdout
-        end
+    end
+
+    context 'house hitting, house hand value less than 17' do
+      let (:cardH1) {Card.new(suit: 'C', rank: 10)}
+      let (:cardH2) {Card.new(suit: 'C', rank: 6)}
+      let (:cardP1) {Card.new(suit: 'C', rank: 10)}
+      let (:cardP2) {Card.new(suit: 'C', rank: 8)}
+      it 'hits because less than 17' do
+        player.hand.cards << cardP1
+        player.hand.cards << cardP2
+        house.hand.cards << cardH1
+        house.hand.cards << cardH2
+        house_original_hand = house.hand.cards.length
+        subject.house_logic
+        expect(house.hand.cards.length).to_not eq house_original_hand
       end
-      context 'bet' do
-        it 'player wins, player hand bigger than house' do
-          initial_pbudget = player.budget
-          subject.bet = 20
-          allow(player.hand).to receive(:hand_value).and_return(18)
-          allow(house.hand).to receive(:hand_value).and_return(17)
-          subject.winner
-          # binding.pry
-          expect(player.budget).to eq initial_pbudget += subject.bet
-          # expect(player.budget).to_not eq initial_pbudget
-        end
+    end
 
-        it 'player wins, house busted' do
-          initial_pbudget = player.budget
-          subject.bet = 20
-          allow(player.hand).to receive(:hand_value).and_return(18)
-          allow(house.hand).to receive(:hand_value).and_return(22)
-          allow(house).to receive(:bust?).and_return(true)
-          subject.winner
-          # binding.pry
-          expect(player.budget).to eq initial_pbudget += subject.bet
-        end
-
-        it 'house wins, players loses the bet' do
-          initial_pbudget = player.budget
-          subject.bet = 20
-          allow(player.hand).to receive(:hand_value).and_return(17)
-          allow(house.hand).to receive(:hand_value).and_return(18)
-          subject.winner
-          # binding.pry
-          expect(player.budget).to eq initial_pbudget -= subject.bet
-          # expect(player.budget).to_not eq initial_pbudget
-        end
-
-        it 'house wins, players busted' do
-          initial_pbudget = player.budget
-          subject.bet = 20
-          allow(player.hand).to receive(:hand_value).and_return(22)
-          allow(house.hand).to receive(:hand_value).and_return(18)
-          allow(player).to receive(:bust?).and_return(true)
-          subject.winner
-          # binding.pry
-          expect(player.budget).to eq initial_pbudget -= subject.bet
-          # expect(player.budget).to_not eq initial_pbudget
-        end
-
+    context 'house hitting, house hand value less than 17. Player less than 17' do
+      let (:cardH1) {Card.new(suit: 'C', rank: 10)}
+      let (:cardH2) {Card.new(suit: 'C', rank: 6)}
+      let (:cardP1) {Card.new(suit: 'C', rank: 10)}
+      let (:cardP2) {Card.new(suit: 'C', rank: 6)}
+      it 'hits because less than 17' do
+        player.hand.cards << cardP1
+        player.hand.cards << cardP2
+        house.hand.cards << cardH1
+        house.hand.cards << cardH2
+        house_original_hand = house.hand.cards.length
+        subject.house_logic
+        expect(house.hand.cards.length).to_not eq house_original_hand
       end
+    end
 
+    context 'house stands, more than player and more than 17' do
+      let (:cardH1) {Card.new(suit: 'C', rank: 10)}
+      let (:cardH2) {Card.new(suit: 'C', rank: 8)}
+      let (:cardP1) {Card.new(suit: 'C', rank: 10)}
+      let (:cardP2) {Card.new(suit: 'C', rank: 8)}
+      it 'hits stands' do
+        player.hand.cards << cardP1
+        player.hand.cards << cardP2
+        house.hand.cards << cardH1
+        house.hand.cards << cardH2
+        house_original_hand = house.hand.cards.length
+        subject.house_logic
+        expect(house.hand.cards.length).to eq house_original_hand
+      end
+      # it 'asks for a card if the house hand is less than player' do
+      #   subject.deal_the_cards
+      #   house_original_hand = house.hand.hand_value
+      #   player_original_hand = player.hand.hand_value
+      #   subject.house_logic
+      #   if house_original_hand <= player_original_hand || house_original_hand < 17
+      #     # binding.pry
+      #     expect(house.hand.cards.length).to_not eq 2
+      #   elsif house_original_hand == player_original_hand && house_original_hand >= 17
+      #     # binding.pry
+      #     expect(house.hand.cards.length).to eq 2
+      #   else
+      #     # binding.pry
+      #     expect(house.hand.cards.length).to eq 2
+      #   end
+      # end
+    end
+
+    context 'house behaviour about busting' do
+      it 'Player busts house does nothing' do
+        allow(player).to receive(:bust?).and_return(true)
+        expect(subject.house_logic).to eq nil
+      end
+      it 'House busts, player wins' do
+        allow(house).to receive(:bust?).and_return(true)
+        expect{subject.house_logic}.to output("#{house.name} busted, #{player.name} wins\n").to_stdout
+      end
+      it 'tie scenario' do
+        player.hand = house.hand
+        expect{subject.house_logic}.to output{"#{house.name} got\n" ; house.hand.show_cards ; "it\' a tie!"}.to_stdout
+      end
+    end
+  end
+
+  context 'bet handling' do
+
+    it 'player wins, player hand bigger than house' do
+      initial_pbudget = player.budget
+      subject.bet = 20
+      allow(player.hand).to receive(:hand_value).and_return(18)
+      allow(house.hand).to receive(:hand_value).and_return(17)
+      subject.winner
+      # binding.pry
+      expect(player.budget).to eq initial_pbudget += subject.bet
+      # expect(player.budget).to_not eq initial_pbudget
+    end
+
+    it 'player wins, house busted' do
+      initial_pbudget = player.budget
+      subject.bet = 20
+      allow(player.hand).to receive(:hand_value).and_return(18)
+      allow(house.hand).to receive(:hand_value).and_return(22)
+      allow(house).to receive(:bust?).and_return(true)
+      subject.winner
+      # binding.pry
+      expect(player.budget).to eq initial_pbudget += subject.bet
+    end
+
+    it 'house wins, players loses the bet' do
+      initial_pbudget = player.budget
+      subject.bet = 20
+      allow(player.hand).to receive(:hand_value).and_return(17)
+      allow(house.hand).to receive(:hand_value).and_return(18)
+      subject.winner
+      # binding.pry
+      expect(player.budget).to eq initial_pbudget -= subject.bet
+      # expect(player.budget).to_not eq initial_pbudget
+    end
+
+    it 'house wins, players busted' do
+      initial_pbudget = player.budget
+      subject.bet = 20
+      allow(player.hand).to receive(:hand_value).and_return(22)
+      allow(house.hand).to receive(:hand_value).and_return(18)
+      allow(player).to receive(:bust?).and_return(true)
+      subject.winner
+      # binding.pry
+      expect(player.budget).to eq initial_pbudget -= subject.bet
+      # expect(player.budget).to_not eq initial_pbudget
     end
 
   end
+
+
+
+
+
+
 end
