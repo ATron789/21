@@ -1,4 +1,6 @@
 require_relative 'card'
+require_relative 'input_reader'
+
 class Deck
   attr_reader :cards
   attr_accessor :number_of_decks
@@ -17,9 +19,9 @@ class Deck
     end
     @cards.shuffle!
   end
-  def self.build(gamesets)
+  def self.build(inputs)
     deck = self.new
-    deck.number_of_decks = gamesets.decks
+    deck.number_of_decks = inputs.n_deck
     #why do I need this?
     deck
   end

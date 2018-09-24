@@ -22,4 +22,18 @@ describe Player do
       expect(subject.no_budget?).to be true
     end
   end
+
+  context 'from inputs' do
+    let (:inputs) {InputReader.new(p_name: 'foo', p_budget: '5000')}
+    it 'creates a new instance of player from inputs, name check' do
+      new_player = Player.build(inputs)
+      expect(new_player.name).to eq inputs.p_name
+    end
+
+    it 'creates a new instance of player from inputs, budget check' do
+      new_player = Player.build(inputs)
+      expect(new_player.budget).to eq inputs.p_budget
+    end
+  
+  end
 end

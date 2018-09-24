@@ -1,4 +1,5 @@
 require 'game'
+require 'input_reader'
 require 'pry'
 
 describe Game do
@@ -7,13 +8,13 @@ describe Game do
   end
 
   let(:deck)  {Deck.new}
-  let(:player) {Player.new(budget: 200)}
+  let(:player) {Player.new(budget: 5000)}
   let(:house) {House.new}
   subject {Game.new(player, house, deck)}
 
   context  'it accepts the right input' do
     it 'it accepts only the right bet: Integer and less than player budget' do
-      allow(subject).to receive(:gets).and_return("ciao\n", "2000\n", "20\n")
+      allow(subject).to receive(:gets).and_return("ciao\n", "6000\n", "20\n")
       subject.bet_input
       expect(subject.bet).to eq 20
     end
@@ -42,7 +43,7 @@ describe Game do
       expect(player.bust?).to be_truthy
     end
     it 'it stands' do
-      allow(subject).to receive(:gets).and_return("s\n")
+      allow(subject).to receive(:gets).and_return("s")
       subject.deal_the_cards
       subject.hit_or_stand
       expect(player.hand.cards.length).to eq 2
@@ -113,22 +114,7 @@ describe Game do
         subject.house_logic
         expect(house.hand.cards.length).to eq house_original_hand
       end
-      # it 'asks for a card if the house hand is less than player' do
-      #   subject.deal_the_cards
-      #   house_original_hand = house.hand.hand_value
-      #   player_original_hand = player.hand.hand_value
-      #   subject.house_logic
-      #   if house_original_hand <= player_original_hand || house_original_hand < 17
-      #     # binding.pry
-      #     expect(house.hand.cards.length).to_not eq 2
-      #   elsif house_original_hand == player_original_hand && house_original_hand >= 17
-      #     # binding.pry
-      #     expect(house.hand.cards.length).to eq 2
-      #   else
-      #     # binding.pry
-      #     expect(house.hand.cards.length).to eq 2
-      #   end
-      # end
+     
     end
 
     context 'house behaviour about busting' do
@@ -194,11 +180,21 @@ describe Game do
       # expect(player.budget).to_not eq initial_pbudget
     end
 
+    it 'tie, bets are null' do
+      initial_pbudget = player.budget
+      subject.bet = 20
+      allow(player.hand).to receive(:hand_value).and_return(20)
+      allow(house.hand).to receive(:hand_value).and_return(20)
+      subject.winner
+      expect(player.budget).to eq initial_pbudget
+    end
   end
-
-
-
-
-
-
+  context 'main game' do
+    it 'plays, runs out of budget, then game over'do
+      allow(player).to receive(:no_budget?).and_return(true)
+      allow(subject).to receive(:gets).and_return('20', 's')
+      subject.play
+      expect{subject.winner}.to output{"#{player.name} run has no budget left, game over"}.to_stdout
+    end
+  end
 end

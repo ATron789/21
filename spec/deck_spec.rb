@@ -1,4 +1,5 @@
 require 'deck'
+require 'input_reader'
 require 'hand'
 
 describe Deck do
@@ -23,6 +24,13 @@ describe Deck do
     it 'it deals 2 cards' do
       2.times {subject.deal(hand.cards)}
       expect(hand.cards.length).to eq 2
+    end
+  end
+  context 'from inputs' do
+    let (:inputs) {InputReader.new(n_deck: 8)}
+    it 'creates a new instance of Deck from inputs' do
+      new_deck = Deck.build(inputs)
+      expect(new_deck.number_of_decks).to eq inputs.n_deck
     end
   end
 end

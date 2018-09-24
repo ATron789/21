@@ -1,4 +1,5 @@
 require_relative 'hand'
+require_relative 'input_reader'
 #this class defines the actual player, inheriting the hand instance from the Hand class.
 #it has also a name and budget instance
 class Player
@@ -9,13 +10,14 @@ class Player
     @hand  = Hand.new
   end
 
-  def self.build(gamesets)
+  def self.build(inputs)
     player1 = self.new
-    player1.name = gamesets.player_name
-    player1.budget = gamesets.player_budget
+    player1.name = inputs.p_name
+    player1.budget = inputs.p_budget
     #why do I need this?
     player1
   end
+    
   def bust?
     @hand.hand_value > 21
   end
