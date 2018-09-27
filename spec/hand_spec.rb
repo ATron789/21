@@ -27,11 +27,11 @@ describe Hand do
 
     it 'the hand has an ACE' do
       subject.cards << ace_card
-      expect(subject.ace_check).to be true
+      expect(subject.ace_check?).to be true
     end
     it 'the hand does not have an ACE' do
       subject.cards << not_ace_card
-      expect(subject.ace_check).to be false
+      expect(subject.ace_check?).to be false
     end
   end
 
@@ -40,6 +40,11 @@ describe Hand do
       2.times {deck.deal(subject.cards)}
       subject.hand_reset
       expect(subject.cards).to eq []
+    end
+  end
+
+  context 'hard-soft hand' do
+    it 'A and high card cannot bust with another hit' do
     end
   end
 

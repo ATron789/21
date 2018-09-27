@@ -3,6 +3,9 @@ require 'player'
 
 
 describe InputReader do
+  before(:each) do
+    allow($stdout).to receive(:write)
+  end
     context 'receiving the right inputs' do
 
         #the following lines stops the console
@@ -11,7 +14,7 @@ describe InputReader do
         end
 
         let(:player) {Player.new(budget: 5000)}
-        subject {InputReader.new} 
+        subject {InputReader.new}
 
 
         it 'receives a name input' do
@@ -60,6 +63,6 @@ describe InputReader do
             expect(subject.p_budget).to eq 5000
             expect(subject.n_deck).to eq 2
         end
-    
+
     end
 end

@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/mnt/c/ciao/21/spec/bet_spec.rb": [
+      "/Users/albertopavano/code_training/blackjack/spec/bet_spec.rb": [
         1,
         1,
         1,
@@ -9,7 +9,7 @@
         null,
         null
       ],
-      "/mnt/c/ciao/21/lib/bet.rb": [
+      "/Users/albertopavano/code_training/blackjack/lib/bet.rb": [
         1,
         1,
         1,
@@ -17,7 +17,7 @@
         null,
         null
       ],
-      "/mnt/c/ciao/21/spec/card_spec.rb": [
+      "/Users/albertopavano/code_training/blackjack/spec/card_spec.rb": [
         1,
         1,
         1,
@@ -79,7 +79,7 @@
         null,
         null
       ],
-      "/mnt/c/ciao/21/lib/card.rb": [
+      "/Users/albertopavano/code_training/blackjack/lib/card.rb": [
         null,
         1,
         1,
@@ -109,11 +109,11 @@
         null,
         null,
         1,
-        62,
+        75,
         null,
         null
       ],
-      "/mnt/c/ciao/21/spec/deck_spec.rb": [
+      "/Users/albertopavano/code_training/blackjack/spec/deck_spec.rb": [
         1,
         1,
         1,
@@ -151,7 +151,7 @@
         null,
         null
       ],
-      "/mnt/c/ciao/21/lib/deck.rb": [
+      "/Users/albertopavano/code_training/blackjack/lib/deck.rb": [
         1,
         1,
         null,
@@ -180,11 +180,11 @@
         1,
         null,
         1,
-        45,
+        44,
         null,
         null
       ],
-      "/mnt/c/ciao/21/lib/input_reader.rb": [
+      "/Users/albertopavano/code_training/blackjack/lib/input_reader.rb": [
         1,
         1,
         null,
@@ -273,7 +273,7 @@
         null,
         null
       ],
-      "/mnt/c/ciao/21/lib/player.rb": [
+      "/Users/albertopavano/code_training/blackjack/lib/player.rb": [
         1,
         1,
         null,
@@ -302,7 +302,7 @@
         null,
         null
       ],
-      "/mnt/c/ciao/21/lib/hand.rb": [
+      "/Users/albertopavano/code_training/blackjack/lib/hand.rb": [
         null,
         null,
         1,
@@ -314,22 +314,23 @@
         53,
         null,
         1,
+        270,
         null,
-        262,
+        null,
+        1,
+        0,
         null,
         null,
         1,
         2,
         2,
-        1,
-        null,
-        1,
         null,
         null,
         null,
         1,
-        28,
-        32,
+        30,
+        44,
+        null,
         null,
         null,
         1,
@@ -337,7 +338,7 @@
         null,
         null
       ],
-      "/mnt/c/ciao/21/spec/game_spec.rb": [
+      "/Users/albertopavano/code_training/blackjack/spec/game_spec.rb": [
         1,
         1,
         1,
@@ -539,7 +540,7 @@
         null,
         null
       ],
-      "/mnt/c/ciao/21/lib/game.rb": [
+      "/Users/albertopavano/code_training/blackjack/lib/game.rb": [
         1,
         1,
         1,
@@ -644,36 +645,36 @@
         null,
         null,
         1,
+        17,
+        null,
         16,
-        null,
-        14,
         4,
         null,
-        10,
-        6,
-        6,
-        6,
-        6,
-        6,
-        6,
-        6,
-        6,
-        6,
+        12,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
         4,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
         1,
         1,
         1,
         1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        3,
+        2,
+        2,
+        2,
+        2,
         null,
         1,
         null,
@@ -694,17 +695,17 @@
         7,
         7,
         7,
-        1,
-        1,
-        6,
-        1,
-        1,
+        2,
+        2,
         5,
         1,
         1,
         4,
-        2,
-        2,
+        1,
+        1,
+        3,
+        1,
+        1,
         2,
         2,
         null,
@@ -714,7 +715,7 @@
         null,
         null
       ],
-      "/mnt/c/ciao/21/lib/house.rb": [
+      "/Users/albertopavano/code_training/blackjack/lib/house.rb": [
         1,
         null,
         null,
@@ -727,11 +728,11 @@
         null,
         null,
         1,
-        20,
+        22,
         null,
         null
       ],
-      "/mnt/c/ciao/21/spec/hand_spec.rb": [
+      "/Users/albertopavano/code_training/blackjack/spec/hand_spec.rb": [
         1,
         1,
         1,
@@ -777,9 +778,14 @@
         null,
         null,
         null,
+        1,
+        1,
+        null,
+        null,
+        null,
         null
       ],
-      "/mnt/c/ciao/21/spec/house_spec.rb": [
+      "/Users/albertopavano/code_training/blackjack/spec/house_spec.rb": [
         1,
         1,
         1,
@@ -794,18 +800,21 @@
         null,
         1,
         1,
-        4,
+        3,
         null,
         1,
         null,
         null
       ],
-      "/mnt/c/ciao/21/spec/input_reader_spec.rb": [
+      "/Users/albertopavano/code_training/blackjack/spec/input_reader_spec.rb": [
         1,
         1,
         null,
         null,
         1,
+        1,
+        7,
+        null,
         1,
         null,
         null,
@@ -867,7 +876,7 @@
         null,
         null
       ],
-      "/mnt/c/ciao/21/spec/player_spec.rb": [
+      "/Users/albertopavano/code_training/blackjack/spec/player_spec.rb": [
         1,
         1,
         1,
@@ -882,7 +891,7 @@
         null,
         1,
         1,
-        4,
+        3,
         null,
         1,
         null,
@@ -909,6 +918,6 @@
         null
       ]
     },
-    "timestamp": 1537785134
+    "timestamp": 1538083194
   }
 }
