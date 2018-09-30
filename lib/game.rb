@@ -73,12 +73,23 @@ class Game
   def hit_or_stand
     system 'clear'
     player.hand.show_cards
-    puts
-    puts "#{player.name}\'s hand value is #{player.hand.hand_value}"
-    puts
-    puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
-    puts
-    puts 'press h for hit or press s for stand'
+    if player.hand.ace_check? && player.hand.soft_hand_value <= 21
+      puts
+      puts "#{player.name}\'s hand value is #{player.hand.hand_value}"
+      puts
+      puts "#{player.name} has a soft #{player.hand.soft_hand_value}"
+      puts
+      puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
+      puts
+      puts 'press h for hit or press s for stand'
+    else
+      puts
+      puts "#{player.name}\'s hand value is #{player.hand.hand_value}"
+      puts
+      puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
+      puts
+      puts 'press h for hit or press s for stand'
+    end
 
     choice = gets.chomp.downcase
     case choice
@@ -107,6 +118,7 @@ class Game
     elsif house.bust?
       puts "#{house.name} busted, #{player.name} wins"
     else
+      #we need anther ace_check here
       if  house.hand.hand_value < 17
         puts "#{house.name} hand is"
         puts

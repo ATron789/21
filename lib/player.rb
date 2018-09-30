@@ -1,5 +1,5 @@
 require_relative 'hand'
-require_relative 'input_reader'
+
 #this class defines the actual player, inheriting the hand instance from the Hand class.
 #it has also a name and budget instance
 class Player
@@ -17,10 +17,11 @@ class Player
     #why do I need this?
     player1
   end
-    
+
   def bust?
     @hand.hand_value > 21
   end
+
   def no_budget?
     @budget == 0
   end

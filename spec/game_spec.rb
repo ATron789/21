@@ -114,7 +114,7 @@ describe Game do
         subject.house_logic
         expect(house.hand.cards.length).to eq house_original_hand
       end
-     
+
     end
 
     context 'house behaviour about busting' do
@@ -126,11 +126,8 @@ describe Game do
         allow(house).to receive(:bust?).and_return(true)
         expect{subject.house_logic}.to output("#{house.name} busted, #{player.name} wins\n").to_stdout
       end
-      it 'tie scenario' do
-        player.hand = house.hand
-        expect{subject.house_logic}.to output{"#{house.name} got\n" ; house.hand.show_cards ; "it\' a tie!"}.to_stdout
-      end
     end
+
   end
 
   context 'bet handling' do

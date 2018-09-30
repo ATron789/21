@@ -1,6 +1,5 @@
 #The hand class definse the actual holding of the cards.
 #Not necessary I just wanted to experiment with class inheritance
-require_relative 'deck'
 require 'pry'
 
 class Hand
@@ -12,14 +11,12 @@ class Hand
     @cards.inject(0) { |sum,card| sum + card.value}
   end
 
-  def soft_hand
+  def soft_hand_value
     self.hand_value + 10 if ace_check?
   end
 
   def ace_check?
-    @cards.each do |card|
-      return card.rank == 'A'
-    end
+    @cards.any? {|card| card.rank == 'A'}
   end
 
   def show_cards

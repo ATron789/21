@@ -1,6 +1,7 @@
 require 'hand'
 require 'card'
 require 'deck'
+require 'pry'
 
 describe Hand do
   subject {Hand.new}
@@ -23,14 +24,19 @@ describe Hand do
 
   context 'ace checker' do
     let(:ace_card) {Card.new(suit: 'C', rank: 'A')}
-    let(:not_ace_card) {Card.new(suit: 'C', rank: '8')}
+    let(:not_ace_card0) {Card.new(suit: 'C', rank: '8')}
+    let(:not_ace_card1) {Card.new(suit: 'H', rank: '6')}
 
     it 'the hand has an ACE' do
+      subject.cards << not_ace_card0
+      subject.cards << not_ace_card1
       subject.cards << ace_card
+      binding.pry
       expect(subject.ace_check?).to be true
     end
     it 'the hand does not have an ACE' do
-      subject.cards << not_ace_card
+      subject.cards << not_ace_card0
+      subject.cards << not_ace_card1
       expect(subject.ace_check?).to be false
     end
   end
@@ -43,9 +49,25 @@ describe Hand do
     end
   end
 
-  context 'hard-soft hand' do
-    it 'A and high card cannot bust with another hit' do
+  context 'soft hand' do
+    let(:ace_card) {Card.new(suit: 'C', rank: 'A')}
+    let(:reg_card) {Card.new(suit: 'S', rank: 8)}
+    it 'has a soft hand too' do
+      subject.cards << ace_card
+      subject.cards << reg_card
+      expect(subject.soft_hand_value).to eq subject.hand_value + 10
     end
+  end
+
+  context 'hard hand' do
+    let(:face_card) {Card.new(suit: 'C', rank: 'K')}
+    let(:reg_card) {Card.new(suit: 'S', rank: 8)}
+    it 'does not have a soft hand' do
+      subject.cards << face_card
+      subject.cards << reg_card
+      expect(subject.soft_hand_value).to be_falsey
+    end
+
   end
 
 end

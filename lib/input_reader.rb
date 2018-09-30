@@ -1,4 +1,5 @@
 require_relative 'player'
+
 class InputReader
 
   attr_accessor :p_name, :p_budget, :n_deck, :bet_in
@@ -9,7 +10,7 @@ class InputReader
     @n_deck = n_deck
     @bet_in = bet_in
   end
-  
+
   def set_up
     name_input
     budget_input
