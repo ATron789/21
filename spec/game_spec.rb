@@ -38,6 +38,7 @@ describe Game do
     it 'when hit receive a card till it busts' do
       allow(subject).to receive(:gets).and_return("no", "h\n")
       subject.deal_the_cards
+      binding.pry
       subject.hit_or_stand
       expect(player.hand.cards.length).to be > 2
       expect(player.bust?).to be_truthy
@@ -48,13 +49,29 @@ describe Game do
       subject.hit_or_stand
       expect(player.hand.cards.length).to eq 2
     end
+
+    context 'soft hand scenario' do
+      let (:cardP1) {Card.new(suit: 'C', rank: 'A')}
+      let (:cardP2) {Card.new(suit: 'C', rank: 8)}
+      let (:cardH1) {Card.new(suit: 'C', rank: 10)}
+      let (:cardH2) {Card.new(suit: 'C', rank: 8)}
+      it 'has a stays on a soft hand' do
+        player.hand.cards << cardP1
+        player.hand.cards << cardP2
+        house.hand.cards << cardH1
+        house.hand.cards << cardH2
+        allow(subject).to receive(:gets).and_return("s")
+        subject.hit_or_stand
+        expect{subject.house_logic}.to output{"#{player.name} has a soft #{player.hand.soft_hand_value}"}.to_stdout
+      end
+    end
   end
 
   context 'house logic' do
 
     context 'house hitting, house hand value less than player' do
       let (:cardH1) {Card.new(suit: 'C', rank: 10)}
-      let (:cardH2) {Card.new(suit: 'C', rank: 7)}
+      let (:cardH2) {Card.new(suit: 'C', rank: 8)}
       let (:cardP1) {Card.new(suit: 'C', rank: 10)}
       let (:cardP2) {Card.new(suit: 'C', rank: 10)}
       it 'hits because less than player' do
@@ -124,7 +141,7 @@ describe Game do
       end
       it 'House busts, player wins' do
         allow(house).to receive(:bust?).and_return(true)
-        expect{subject.house_logic}.to output("#{house.name} busted, #{player.name} wins\n").to_stdout
+        expect{subject.house_logic}.to output{"#{house.name} busted, #{player.name} wins\n"}.to_stdout
       end
     end
 

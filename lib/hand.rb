@@ -28,4 +28,12 @@ class Hand
   def hand_reset
     @cards = []
   end
+
+  def best_hand
+    if ace_check? && self.hand_value < self.soft_hand_value &&
+        self.soft_hand_value <= 21
+      return self.soft_hand_value
+    end
+    return self.hand_value
+  end
 end

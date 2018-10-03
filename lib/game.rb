@@ -73,23 +73,17 @@ class Game
   def hit_or_stand
     system 'clear'
     player.hand.show_cards
-    if player.hand.ace_check? && player.hand.soft_hand_value <= 21
-      puts
-      puts "#{player.name}\'s hand value is #{player.hand.hand_value}"
-      puts
+    puts
+    puts "#{player.name}\'s hand value is #{player.hand.hand_value}"
+    puts
+    if player.hand.ace_check? && player.hand.soft_hand_value < 21
       puts "#{player.name} has a soft #{player.hand.soft_hand_value}"
       puts
-      puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
-      puts
-      puts 'press h for hit or press s for stand'
-    else
-      puts
-      puts "#{player.name}\'s hand value is #{player.hand.hand_value}"
-      puts
-      puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
-      puts
-      puts 'press h for hit or press s for stand'
     end
+    puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
+    puts
+    puts 'press h for hit or press s for stand'
+
 
     choice = gets.chomp.downcase
     case choice
@@ -113,40 +107,31 @@ class Game
   end
 
   def house_logic
-    if player.bust?
-      nil
-    elsif house.bust?
+    return nil if player.bust?
+    if house.bust?
       puts "#{house.name} busted, #{player.name} wins"
-    else
+      return nil
+    end
       #we need anther ace_check here
-      if  house.hand.hand_value < 17
-        puts "#{house.name} hand is"
-        puts
-        house.hand.show_cards
-        puts
-        puts "#{house.name} hits"
-        deck.deal(house.hand.cards)
-        puts "#{house.name} receives #{house.hand.cards[-1].output_card}"
-        puts
-        house_logic
-      elsif house.hand.hand_value < player.hand.hand_value
-        puts "#{house.name} hand is"
-        puts
-        house.hand.show_cards
-        puts
-        puts "#{house.name} hits"
-        deck.deal(house.hand.cards)
-        puts "#{house.name} receives #{house.hand.cards[-1].output_card}"
-        puts
-        house_logic
-      elsif house.hand.hand_value == player.hand.hand_value
-        puts "#{house.name} got"
-        house.hand.show_cards
-        puts
-        puts "it\' a tie!"
-      else
-        puts "#{house.name} stands and wins"
-      end
+
+    if  house.hand.hand_value < 17 || house.hand.hand_value < player.hand.hand_value
+      puts "#{house.name} hand is"
+      puts
+      house.hand.show_cards
+      puts
+      puts "#{house.name} hits"
+      deck.deal(house.hand.cards)
+      puts "#{house.name} receives #{house.hand.cards[-1].output_card}"
+      puts
+      house_logic
+    end
+    if house.hand.hand_value == player.hand.hand_value
+      puts "#{house.name} got"
+      house.hand.show_cards
+      puts
+      puts "it\' a tie!"
+    else
+      puts "#{house.name} stands and wins"
     end
   end
 

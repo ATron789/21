@@ -31,7 +31,6 @@ describe Hand do
       subject.cards << not_ace_card0
       subject.cards << not_ace_card1
       subject.cards << ace_card
-      binding.pry
       expect(subject.ace_check?).to be true
     end
     it 'the hand does not have an ACE' do
