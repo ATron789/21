@@ -10,6 +10,6 @@ class House
   end
 
   def bust?
-    @hand.hand_value > 21
+    @hand.best_hand > 21
   end
 end

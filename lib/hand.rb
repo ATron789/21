@@ -30,10 +30,13 @@ class Hand
   end
 
   def best_hand
-    if ace_check? && self.hand_value < self.soft_hand_value &&
-        self.soft_hand_value <= 21
+    if ace_check? && self.soft_hand_value <= 21
       return self.soft_hand_value
     end
     return self.hand_value
+  end
+
+  def blackjack?
+    return true if self.cards.length == 2 && self.best_hand == 21
   end
 end

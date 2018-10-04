@@ -20,6 +20,7 @@ class Game
   def play
     bet_input
     deal_the_cards
+    binding.pry
     hit_or_stand
     house_logic
     winner
@@ -71,12 +72,19 @@ class Game
   end
 
   def hit_or_stand
+    if player.hand.blackjack?
+      puts 'BLACKJACK!'
+      puts
+      puts "#{player.name}\'s got"
+      player.hand.show_cards
+      return nil
+    end
     system 'clear'
     player.hand.show_cards
     puts
     puts "#{player.name}\'s hand value is #{player.hand.hand_value}"
     puts
-    if player.hand.ace_check? && player.hand.soft_hand_value < 21
+    if player.hand.best_hand == player.hand.soft_hand_value
       puts "#{player.name} has a soft #{player.hand.soft_hand_value}"
       puts
     end
@@ -114,7 +122,7 @@ class Game
     end
       #we need anther ace_check here
 
-    if  house.hand.hand_value < 17 || house.hand.hand_value < player.hand.hand_value
+    if  house.hand.best_hand < 17 || house.hand.best_hand < player.hand.best_hand
       puts "#{house.name} hand is"
       puts
       house.hand.show_cards
@@ -123,9 +131,16 @@ class Game
       deck.deal(house.hand.cards)
       puts "#{house.name} receives #{house.hand.cards[-1].output_card}"
       puts
+      puts "#{house.name}\'s hand value is #{house.hand.hand_value}"
+      puts
+      if house.hand.best_hand == house.hand.soft_hand_value
+        puts "#{house.name} has a soft #{house.hand.soft_hand_value}"
+      end
+      puts
       house_logic
+      return nil
     end
-    if house.hand.hand_value == player.hand.hand_value
+    if house.hand.best_hand == player.hand.best_hand
       puts "#{house.name} got"
       house.hand.show_cards
       puts
@@ -140,13 +155,13 @@ class Game
     player.hand.show_cards
     puts
     puts "#{player.name}\' hand value:"
-    puts player.hand.hand_value
+    puts player.hand.best_hand
     puts
     puts "#{house.name} got"
     house.hand.show_cards
     puts
     puts "#{house.name}\' hand value:"
-    puts house.hand.hand_value
+    puts house.hand.best_hand
     puts
     if house.bust?
       player.budget += @bet
@@ -154,13 +169,13 @@ class Game
     elsif player.bust?
       player.budget -= @bet
       puts "#{player.name} loses #{@bet}"
-    elsif player.hand.hand_value > house.hand.hand_value
+    elsif player.hand.best_hand > house.hand.best_hand
       player.budget += @bet
       puts "#{player.name} wins #{@bet}"
-    elsif player.hand.hand_value < house.hand.hand_value
+    elsif player.hand.best_hand < house.hand.best_hand
       player.budget -= @bet
       puts "#{player.name} loses #{@bet}"
-    elsif player.hand.hand_value == house.hand.hand_value
+    elsif player.hand.best_hand == house.hand.best_hand
       puts "Bets are null"
     end
     puts "#{player.name} budget is #{player.budget}" unless player.no_budget?

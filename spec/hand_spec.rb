@@ -66,7 +66,38 @@ describe Hand do
       subject.cards << reg_card
       expect(subject.soft_hand_value).to be_falsey
     end
-
+  end
+  context 'best hand' do
+    describe 'hand has a ace' do
+      let(:ace_card) {Card.new(suit: 'C', rank: 'A')}
+      let(:reg_card) {Card.new(suit: 'S', rank: 8)}
+      let(:face_card) {Card.new(suit: 'C', rank: 'K')}
+      it 'if hand has an ace and soft_hand_value is < 21, returns soft hand' do
+        subject.cards << ace_card
+        subject.cards << reg_card
+        expect(subject.best_hand).to eq subject.soft_hand_value
+      end
+      it 'if hand has an ace and soft_hand_value is = 21, returns soft hand' do
+        subject.cards << ace_card
+        subject.cards << face_card
+        expect(subject.best_hand).to eq subject.soft_hand_value
+      end
+      it 'soft hand busted, returns hard hand' do
+        subject.cards << ace_card
+        subject.cards << reg_card
+        subject.cards << face_card
+        expect(subject.best_hand).to eq subject.hand_value
+      end
+    end
+    describe 'hand does not have an ace' do
+      let(:reg_card) {Card.new(suit: 'S', rank: 8)}
+      let(:face_card) {Card.new(suit: 'C', rank: 'K')}
+      it 'soft hand busted, returns hard hand' do
+        subject.cards << reg_card
+        subject.cards << face_card
+        expect(subject.best_hand).to eq subject.hand_value
+      end
+    end
   end
 
 end
