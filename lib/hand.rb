@@ -39,4 +39,15 @@ class Hand
   def blackjack?
     return true if self.cards.length == 2 && self.best_hand == 21
   end
+
+  def splitting
+    if @cards.length == 2 && @cards.uniq.length == 1
+      puts "you want to split?"
+      choice = gets.chomp.downcase
+      case choice
+      when 'y' then
+
+
+    end
+  end
 end

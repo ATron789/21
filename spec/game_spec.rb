@@ -117,10 +117,16 @@ describe Game do
       end
     end
 
-    context 'house shows soft hand value' do
-
-
+    context 'blackjack' do
+      it 'house got a blackjack'do
+      house.hand.cards.push(cards[:A],cards[:K])
+      player.hand.cards.push(cards[:K],cards[8])
+      subject.house_logic
+      expect{subject.house_logic}.to output{'BLACKJACK!'}.to_stdout
+      expect(subject.house.hand.best_hand).to eq house.hand.soft_hand_value
+      end
     end
+
 
     context 'house behaviour about busting' do
       it 'Player busts house does nothing' do
@@ -146,6 +152,17 @@ describe Game do
       expect(player.budget).to eq initial_pbudget += subject.bet
     end
 
+    it 'player won with a blackjack' do
+      initial_pbudget = player.budget
+      subject.bet = 20
+      subject.player.hand.cards.push(cards[:A],cards[:K])
+      subject.house.hand.cards.push(cards[:K],cards[8])
+      subject.winner
+      expect(player.budget).to eq initial_pbudget += (subject.bet * 3)/2
+      expect{subject.winner}.to output{"#{player.name} wins #{(@bet * 3) / 2}"}.to_stdout
+    end
+
+
     it 'player wins, house busted' do
       initial_pbudget = player.budget
       subject.bet = 20
@@ -164,11 +181,12 @@ describe Game do
       expect(player.budget).to eq initial_pbudget -= subject.bet
     end
 
-    it 'house wins, players busted' do
+    it 'house wins, player busted' do
       initial_pbudget = player.budget
       subject.bet = 20
       subject.player.hand.cards.push(cards[:K],cards[8], cards[5])
       subject.house.hand.cards.push(cards[:A],cards[8])
+      binding.pry
       subject.winner
       expect(player.budget).to eq initial_pbudget -= subject.bet
     end
@@ -176,8 +194,8 @@ describe Game do
     it 'tie, bets are null' do
       initial_pbudget = player.budget
       subject.bet = 20
-      subject.player.hand.cards.push(cards[:A],cards[8])
-      subject.house.hand.cards.push(cards[:A],cards[8])
+      subject.player.hand.cards.push(cards[:A],cards[:K])
+      subject.house.hand.cards.push(cards[:A],cards[:K])
       subject.winner
       expect(player.budget).to eq initial_pbudget
     end

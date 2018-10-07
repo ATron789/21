@@ -20,7 +20,7 @@ class Game
   def play
     bet_input
     deal_the_cards
-    binding.pry
+    # binding.pry
     hit_or_stand
     house_logic
     winner
@@ -115,6 +115,12 @@ class Game
   end
 
   def house_logic
+    if house.hand.blackjack?
+      puts "#{house.name} scored a BLACKJACK"
+      puts "#{house.name}\'s got"
+      house.hand.show_cards
+      return nil
+    end
     return nil if player.bust?
     if house.bust?
       puts "#{house.name} busted, #{player.name} wins"
@@ -163,20 +169,25 @@ class Game
     puts "#{house.name}\' hand value:"
     puts house.hand.best_hand
     puts
-    if house.bust?
+    if house.bust? || (player.hand.best_hand > house.hand.best_hand && !player.bust?)
+      if player.hand.blackjack?
+        player.budget += (@bet * 3) / 2
+        puts "#{player.name} wins 3:2 of the original bet"
+        puts "#{player.name} wins #{(@bet * 3) / 2}"
+        return nil
+      end
       player.budget += @bet
       puts "#{player.name} wins #{@bet}"
-    elsif player.bust?
+      return nil
+    end
+    if player.bust? || (player.hand.best_hand < house.hand.best_hand && !house.bust?)
       player.budget -= @bet
       puts "#{player.name} loses #{@bet}"
-    elsif player.hand.best_hand > house.hand.best_hand
-      player.budget += @bet
-      puts "#{player.name} wins #{@bet}"
-    elsif player.hand.best_hand < house.hand.best_hand
-      player.budget -= @bet
-      puts "#{player.name} loses #{@bet}"
-    elsif player.hand.best_hand == house.hand.best_hand
+      return nil
+    end
+    if player.hand.best_hand == house.hand.best_hand
       puts "Bets are null"
+      return nil
     end
     puts "#{player.name} budget is #{player.budget}" unless player.no_budget?
   end

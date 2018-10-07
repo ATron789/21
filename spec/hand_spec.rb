@@ -100,4 +100,10 @@ describe Hand do
     end
   end
 
+  context 'splitting' do
+    it 'player chooses to have to set of hands' do
+      
+    end
+  end
+
 end
