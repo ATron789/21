@@ -10,6 +10,9 @@ class House
   end
 
   def bust?
-    @hand.best_hand > 21
+    @hand.best_value > 21
+  end
+  def hand_reset
+    @hand = Hand.new
   end
 end

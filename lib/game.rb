@@ -24,11 +24,12 @@ class Game
     hit_or_stand
     house_logic
     winner
-    player.hand.hand_reset
-    house.hand.hand_reset
+    player.hand_reset
+    house.hand_reset
     if player.no_budget?
       puts "#{player.name} run has no budget left, game over"
     else
+      puts "#{player.name} budget is #{player.budget}"
       puts "new game, let\'s go. Press any key to continue"
       system 'clear' if gets.chomp
       play
@@ -54,65 +55,71 @@ class Game
   end
 
   def deal_the_cards
-      deck.deal(player.hand.cards)
-      puts "#{player.name}\'s first card is #{player.hand.cards[0].output_card}"
+      deck.deal(player.hands[-1].cards)
+      puts "#{player.name}\'s first card is #{player.hands[-1].cards[0].output_card}"
       deck.deal(house.hand.cards)
       puts "#{house.name}\'s first card is covered"
-      deck.deal(player.hand.cards)
-      puts "#{player.name}\'s second card is #{player.hand.cards[1].output_card}"
+      deck.deal(player.hands[-1].cards)
+      puts "#{player.name}\'s second card is #{player.hands[-1].cards[1].output_card}"
       deck.deal(house.hand.cards)
       puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
   end
 #following method is for testing purposes
   def deal_one_card
-    deck.deal(player.hand.cards)
-    puts "#{player.name} got  #{player.hand.cards[-1].output_card}"
+    player.hands.each do |hand|
+      # return nil if hand.bust?
+      deck.deal(hand.cards)
+      puts "#{player.name} got  #{hand.cards[-1].output_card}"
+    end
     deck.deal(house.hand.cards)
     puts "#{house.name} got  #{house.hand.cards[-1].output_card}"
   end
 
+
   def hit_or_stand
-    if player.hand.blackjack?
-      puts 'BLACKJACK!'
-      puts
-      puts "#{player.name}\'s got"
-      player.hand.show_cards
-      return nil
-    end
-    system 'clear'
-    player.hand.show_cards
-    puts
-    puts "#{player.name}\'s hand value is #{player.hand.hand_value}"
-    puts
-    if player.hand.best_hand == player.hand.soft_hand_value
-      puts "#{player.name} has a soft #{player.hand.soft_hand_value}"
-      puts
-    end
-    puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
-    puts
-    puts 'press h for hit or press s for stand'
-
-
-    choice = gets.chomp.downcase
-    case choice
-    when 'h' then
-      puts
-      deck.deal(player.hand.cards)
-      puts "#{player.name}\'s got #{player.hand.cards[-1].output_card}"
+    player.hands.each do |hand|
+      if hand.blackjack?
+        puts 'BLACKJACK!'
+        puts
+        puts "#{player.name}\'s got"
+        hand.show_cards
+        return nil
+      end
       system 'clear'
-      if player.bust?
-        puts "#{player.name} busted! The House wins!"
+      hand.show_cards
+      puts
+      puts "#{player.name}\'s hand value is #{hand.hand_value}"
+      puts
+      if hand.best_value == hand.soft_hand_value
+        puts "#{player.name} has a soft #{hand.soft_hand_value}"
+        puts
+      end
+      puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}\n"
+      puts 'press h for hit or press s for stand'
+      #implent splitting from here 
+
+      choice = gets.chomp.downcase
+      case choice
+      when 'h' then
+        puts
+        deck.deal(hand.cards)
+        puts "#{player.name}\'s got #{hand.cards[-1].output_card}"
+        system 'clear'
+        if hand.bust?
+          puts "#{player.name} busted! The House wins!"
+        else
+          hit_or_stand
+        end
+      when 's' then
+        puts 'you stand'
+        system 'clear'
       else
+        puts 'invalid input, try again'
         hit_or_stand
       end
-    when 's' then
-      puts 'you stand'
-      system 'clear'
-    else
-      puts 'invalid input, try again'
-      hit_or_stand
     end
   end
+
 
   def house_logic
     if house.hand.blackjack?
@@ -121,14 +128,14 @@ class Game
       house.hand.show_cards
       return nil
     end
-    return nil if player.bust?
-    if house.bust?
+    return nil if player.hands[0].bust?
+    if house.hand.bust?
       puts "#{house.name} busted, #{player.name} wins"
       return nil
     end
       #we need anther ace_check here
 
-    if  house.hand.best_hand < 17 || house.hand.best_hand < player.hand.best_hand
+    if  house.hand.best_value < 17 || house.hand.best_value < player.hands[0].best_value
       puts "#{house.name} hand is"
       puts
       house.hand.show_cards
@@ -139,14 +146,14 @@ class Game
       puts
       puts "#{house.name}\'s hand value is #{house.hand.hand_value}"
       puts
-      if house.hand.best_hand == house.hand.soft_hand_value
+      if house.hand.best_value == house.hand.soft_hand_value
         puts "#{house.name} has a soft #{house.hand.soft_hand_value}"
       end
       puts
       house_logic
       return nil
     end
-    if house.hand.best_hand == player.hand.best_hand
+    if house.hand.best_value == player.best_hand
       puts "#{house.name} got"
       house.hand.show_cards
       puts
@@ -157,39 +164,43 @@ class Game
   end
 
   def winner
-    puts "#{player.name} got"
-    player.hand.show_cards
-    puts
-    puts "#{player.name}\' hand value:"
-    puts player.hand.best_hand
-    puts
-    puts "#{house.name} got"
-    house.hand.show_cards
-    puts
-    puts "#{house.name}\' hand value:"
-    puts house.hand.best_hand
-    puts
-    if house.bust? || (player.hand.best_hand > house.hand.best_hand && !player.bust?)
-      if player.hand.blackjack?
-        player.budget += (@bet * 3) / 2
-        puts "#{player.name} wins 3:2 of the original bet"
-        puts "#{player.name} wins #{(@bet * 3) / 2}"
-        return nil
+    player.hands.each do |hand|
+      puts '----------------'
+      puts "|Hand number #{player.hands.index(hand) + 1} |"
+      puts '----------------'
+      puts "#{player.name} got"
+      hand.show_cards
+      puts
+      puts "#{player.name}\' hand value:"
+      puts hand.best_value
+      puts
+      puts "#{house.name} got"
+      house.hand.show_cards
+      puts
+      puts "#{house.name}\' hand value:"
+      puts house.hand.best_value
+      puts
+      if house.hand.bust? || (hand.best_value > house.hand.best_value && !hand.bust?)
+        if hand.blackjack? && player.hands.length == 1
+          player.budget += @bet * 1.5
+          puts "#{player.name} wins 3:2 of the original bet"
+          puts "#{player.name} wins #{@bet * 1.5}"
+          next
+        end
+        player.budget += @bet
+        puts "#{player.name} wins #{@bet}"
+        next
       end
-      player.budget += @bet
-      puts "#{player.name} wins #{@bet}"
-      return nil
+      if hand.bust? || (hand.best_value < house.hand.best_value && !house.hand.bust?)
+        player.budget -= @bet
+        puts "#{player.name} loses #{@bet}"
+        next
+      end
+      if hand.best_value == house.hand.best_value
+        puts "Bets are null"
+        next
+      end
     end
-    if player.bust? || (player.hand.best_hand < house.hand.best_hand && !house.bust?)
-      player.budget -= @bet
-      puts "#{player.name} loses #{@bet}"
-      return nil
-    end
-    if player.hand.best_hand == house.hand.best_hand
-      puts "Bets are null"
-      return nil
-    end
-    puts "#{player.name} budget is #{player.budget}" unless player.no_budget?
   end
 
 

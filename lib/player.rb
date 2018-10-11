@@ -3,11 +3,11 @@ require_relative 'hand'
 #this class defines the actual player, inheriting the hand instance from the Hand class.
 #it has also a name and budget instance
 class Player
-  attr_accessor :name, :budget, :hand
+  attr_accessor :name, :budget, :hands
   def initialize(name: 'Player', budget: 0)
     @name = name
     @budget = budget
-    @hand  = Hand.new
+    @hands  = [Hand.new]
   end
 
   def self.build(inputs)
@@ -18,11 +18,17 @@ class Player
     player1
   end
 
-  def bust?
-    @hand.best_hand > 21
-  end
-
   def no_budget?
     @budget == 0
+  end
+
+  def hand_reset
+    @hands = [Hand.new]
+  end
+
+  def best_hand
+    not_busted_hands = @hands.select{ |hand| !hand.bust? }
+    not_busted_hands.map! { |hand| hand.best_value }
+    not_busted_hands.max
   end
 end

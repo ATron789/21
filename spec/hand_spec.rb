@@ -6,6 +6,14 @@ require 'pry'
 describe Hand do
   subject {Hand.new}
   let(:deck) {Deck.new}
+  let (:cards) do
+    {
+      :A => Card.new(suit: 'C', rank: 'A'),
+      :K  => Card.new(suit: 'C', rank: 'K'),
+      8 => Card.new(suit: 'C', rank: 8),
+      5 => Card.new(suit: 'C', rank: 5)
+    }
+  end
 
   context 'from a deck' do
     it 'has a card from a deck' do
@@ -23,86 +31,66 @@ describe Hand do
   end
 
   context 'ace checker' do
-    let(:ace_card) {Card.new(suit: 'C', rank: 'A')}
-    let(:not_ace_card0) {Card.new(suit: 'C', rank: '8')}
-    let(:not_ace_card1) {Card.new(suit: 'H', rank: '6')}
+
 
     it 'the hand has an ACE' do
-      subject.cards << not_ace_card0
-      subject.cards << not_ace_card1
-      subject.cards << ace_card
+      subject.cards.push(cards[:A], cards[8],cards[5])
       expect(subject.ace_check?).to be true
     end
     it 'the hand does not have an ACE' do
-      subject.cards << not_ace_card0
-      subject.cards << not_ace_card1
+      subject.cards.push(cards[:K], cards[8])
       expect(subject.ace_check?).to be false
     end
   end
 
   context 'reset' do
     it 'drops the cards to start a new game' do
-      2.times {deck.deal(subject.cards)}
+      subject.cards.push(cards[:K], cards[8], cards[5])
       subject.hand_reset
       expect(subject.cards).to eq []
     end
   end
 
   context 'soft hand' do
-    let(:ace_card) {Card.new(suit: 'C', rank: 'A')}
-    let(:reg_card) {Card.new(suit: 'S', rank: 8)}
     it 'has a soft hand too' do
-      subject.cards << ace_card
-      subject.cards << reg_card
+      subject.cards.push(cards[:A], cards[8])
       expect(subject.soft_hand_value).to eq subject.hand_value + 10
     end
   end
 
   context 'hard hand' do
-    let(:face_card) {Card.new(suit: 'C', rank: 'K')}
-    let(:reg_card) {Card.new(suit: 'S', rank: 8)}
+
     it 'does not have a soft hand' do
-      subject.cards << face_card
-      subject.cards << reg_card
+      subject.cards.push(cards[:K], cards[8])
       expect(subject.soft_hand_value).to be_falsey
     end
   end
   context 'best hand' do
     describe 'hand has a ace' do
-      let(:ace_card) {Card.new(suit: 'C', rank: 'A')}
-      let(:reg_card) {Card.new(suit: 'S', rank: 8)}
-      let(:face_card) {Card.new(suit: 'C', rank: 'K')}
       it 'if hand has an ace and soft_hand_value is < 21, returns soft hand' do
-        subject.cards << ace_card
-        subject.cards << reg_card
-        expect(subject.best_hand).to eq subject.soft_hand_value
+        subject.cards.push(cards[:A], cards[8])
+        expect(subject.best_value).to eq subject.soft_hand_value
       end
       it 'if hand has an ace and soft_hand_value is = 21, returns soft hand' do
-        subject.cards << ace_card
-        subject.cards << face_card
-        expect(subject.best_hand).to eq subject.soft_hand_value
+        subject.cards.push(cards[:A], cards[:K])
+        expect(subject.best_value).to eq subject.soft_hand_value
       end
       it 'soft hand busted, returns hard hand' do
-        subject.cards << ace_card
-        subject.cards << reg_card
-        subject.cards << face_card
-        expect(subject.best_hand).to eq subject.hand_value
+        subject.cards.push(cards[:A], cards[:K], cards[8])
+        expect(subject.best_value).to eq subject.hand_value
       end
     end
     describe 'hand does not have an ace' do
-      let(:reg_card) {Card.new(suit: 'S', rank: 8)}
-      let(:face_card) {Card.new(suit: 'C', rank: 'K')}
-      it 'soft hand busted, returns hard hand' do
-        subject.cards << reg_card
-        subject.cards << face_card
-        expect(subject.best_hand).to eq subject.hand_value
+      it 'returns hard hand' do
+        subject.cards.push(cards[8], cards[:K])
+        expect(subject.best_value).to eq subject.hand_value
       end
     end
   end
 
   context 'splitting' do
     it 'player chooses to have to set of hands' do
-      
+
     end
   end
 

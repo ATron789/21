@@ -29,7 +29,11 @@ class Hand
     @cards = []
   end
 
-  def best_hand
+  def bust?
+    self.best_value > 21
+  end
+
+  def best_value
     if ace_check? && self.soft_hand_value <= 21
       return self.soft_hand_value
     end
@@ -37,17 +41,17 @@ class Hand
   end
 
   def blackjack?
-    return true if self.cards.length == 2 && self.best_hand == 21
+    return true if self.cards.length == 2 && self.best_value == 21
   end
 
-  def splitting
-    if @cards.length == 2 && @cards.uniq.length == 1
-      puts "you want to split?"
-      choice = gets.chomp.downcase
-      case choice
-      when 'y' then
+  # def splitting
+  #   if @cards.length == 2 && @cards.uniq.length == 1
+  #     puts "you want to split?"
+  #     choice = gets.chomp.downcase
+  #     case choice
+  #     when 'y' then
 
 
-    end
-  end
+  #   end
+  # end
 end
