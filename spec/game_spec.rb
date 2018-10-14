@@ -3,6 +3,7 @@ require 'input_reader'
 require 'pry'
 
 describe Game do
+
   before(:each) do
     allow($stdout).to receive(:write)
   end
@@ -12,7 +13,8 @@ describe Game do
       :A => Card.new(suit: 'C', rank: 'A'),
       :K  => Card.new(suit: 'C', rank: 'K'),
       8 => Card.new(suit: 'C', rank: 8),
-      5 => Card.new(suit: 'C', rank: 5)
+      5 => Card.new(suit: 'C', rank: 5),
+      7 => Card.new(suit: 'C', rank: 5)
     }
   end
 
@@ -74,77 +76,157 @@ describe Game do
     end
   end
 
+  # describe 'splitting' do
+  #   before(:each) do
+  #     player.hands[0].cards.push(cards[:K],cards[:K])
+  #     @original_hands_number = player.hands.length
+  #   end
+  #   it 'player decides to split' do
+  #     game.splitting
+  #     expect(player.hands.length).to_not eq @original_hands_number
+  #   end
+  # end
+
+
   describe 'house logic' do
 
-    context 'house hitting, house hand value less than player' do
-      it 'hits because less than player' do
+    context 'player has only one hand ' do
+
+        it 'house hits because less than player' do
+          player.hands[0].cards.push(cards[:K],cards[:K])
+          house.hand.cards.push(cards[8], cards[:K])
+          house_original_hand = house.hand.cards.length
+          game.house_logic
+          expect(house.hand.cards.length).to_not eq house_original_hand
+        end
+
+        it 'house hits because less than 17' do
+          player.hands[0].cards.push(cards[:K],cards[8])
+          house.hand.cards.push(cards[:K], cards[5])
+          house_original_hand = house.hand.cards.length
+          game.house_logic
+          expect(house.hand.cards.length).to_not eq house_original_hand
+        end
+
+        it 'hits because less than 17 even if same score as the player' do
+          player.hands[0].cards.push(cards[:K],cards[5])
+          house.hand.cards.push(cards[:K], cards[5])
+          house_original_hand = house.hand.cards.length
+          game.house_logic
+          expect(house.hand.cards.length).to_not eq house_original_hand
+        end
+        it 'house stands, bigger score than player' do
+          player.hands[0].cards.push(cards[:K],cards[8])
+          house.hand.cards.push(cards[:A], cards[8])
+          house_original_hand = house.hand.cards.length
+          game.house_logic
+          expect(house.hand.cards.length).to eq house_original_hand
+        end
+
+
+      context 'blackjack' do
+        it 'house got a blackjack'do
+          house.hand.cards.push(cards[:A],cards[:K])
+          player.hands[0].cards.push(cards[:K],cards[8])
+          game.house_logic
+          expect{game.house_logic}.to output{'BLACKJACK!'}.to_stdout
+          expect(game.house.hand.best_value).to eq house.hand.soft_hand_value
+        end
+      end
+
+
+      context 'busting' do
+
+        it 'Player busts house does nothing' do
+          allow(player.hands[0]).to receive(:bust?).and_return(true)
+          expect(game.house_logic).to eq nil
+        end
+
+        it 'House busts, player wins' do
+          allow(house.hand).to receive(:bust?).and_return(true)
+          expect{game.house_logic}.to output{"#{house.name} busted, #{player.name} wins\n"}.to_stdout
+        end
+      end
+
+    end
+
+    describe 'player has more than one hand' do
+
+      before(:each) do
+        player.hands.push(Hand.new)
+      end
+
+      it 'hits because less than one of the player hands' do
+        player.hands[0].cards.push(cards[5],cards[8])
+        player.hands[1].cards.push(cards[8],cards[8])
+        house.hand.cards.push(cards[5], cards[:K])
+        house_original_hand = house.hand.cards.length
+        game.house_logic
+        expect(house.hand.cards.length).to_not eq house_original_hand
+      end
+
+      it 'hits because less than 17' do
         player.hands[0].cards.push(cards[:K],cards[:K])
-        house.hand.cards.push(cards[8], cards[:K])
+        player.hands[1].cards.push(cards[:K],cards[5])
+        house.hand.cards.push(cards[5], cards[:K])
         house_original_hand = house.hand.cards.length
         game.house_logic
         expect(house.hand.cards.length).to_not eq house_original_hand
       end
-    end
 
-    context 'house hitting, house hand value less than 17' do
-      it 'hits because less than 17' do
+      it 'house stands' do
         player.hands[0].cards.push(cards[:K],cards[8])
-        house.hand.cards.push(cards[:K], cards[5])
-        house_original_hand = house.hand.cards.length
-        game.house_logic
-        expect(house.hand.cards.length).to_not eq house_original_hand
-      end
-    end
-
-    context 'house hitting, house hand value less than 17. Player less than 17' do
-      it 'hits because less than 17' do
-        player.hands[0].cards.push(cards[:K],cards[5])
-        house.hand.cards.push(cards[:K], cards[5])
-        house_original_hand = house.hand.cards.length
-        game.house_logic
-        expect(house.hand.cards.length).to_not eq house_original_hand
-      end
-    end
-
-    context 'house stands, more than player and more than 17' do
-      it 'hits stands' do
-        player.hands[0].cards.push(cards[:K],cards[8])
+        player.hands[1].cards.push(cards[:K],cards[5])
         house.hand.cards.push(cards[:A], cards[8])
         house_original_hand = house.hand.cards.length
         game.house_logic
         expect(house.hand.cards.length).to eq house_original_hand
       end
-    end
 
-    context 'blackjack' do
-      it 'house got a blackjack'do
-      house.hand.cards.push(cards[:A],cards[:K])
-      player.hands[0].cards.push(cards[:K],cards[8])
-      game.house_logic
-      expect{game.house_logic}.to output{'BLACKJACK!'}.to_stdout
-      expect(game.house.hand.best_value).to eq house.hand.soft_hand_value
+      context 'blackjack' do
+        it 'house got a blackjack'do
+          house.hand.cards.push(cards[:A],cards[:K])
+          player.hands[0].cards.push(cards[:K],cards[8])
+          player.hands[1].cards.push(cards[:A],cards[8])
+          game.house_logic
+          expect{game.house_logic}.to output{'BLACKJACK!'}.to_stdout
+          expect(game.house.hand.best_value).to eq house.hand.soft_hand_value
+        end
       end
-    end
 
+      context 'busting' do
 
-    context 'house behaviour about busting' do
-      it 'Player busts house does nothing' do
-        allow(player.hands[0]).to receive(:bust?).and_return(true)
-        expect(game.house_logic).to eq nil
+        it 'Player busts on both hands,house does nothing' do
+          player.hands[0].cards.push(cards[:K],cards[8], cards[5])
+          player.hands[1].cards.push(cards[:K],cards[8], cards[5])
+          house.hand.cards.push(cards[:A], cards[8])
+          house_original_hand = house.hand.cards.length
+          game.house_logic
+          expect(house.hand.cards.length).to eq house_original_hand
+        end
+
+        it 'Player busts on one hand,house plays against player best hand' do
+          player.hands[0].cards.push(cards[:K],cards[8], cards[5])
+          player.hands[1].cards.push(cards[:K],cards[8])
+          house.hand.cards.push(cards[:K], cards[7])
+          house_original_hand = house.hand.cards.length
+          game.house_logic
+          expect(house.hand.cards.length).to_not eq house_original_hand
+        end
+
       end
-      it 'House busts, player wins' do
-        allow(house.hand).to receive(:bust?).and_return(true)
-        expect{game.house_logic}.to output{"#{house.name} busted, #{player.name} wins\n"}.to_stdout
-      end
+
     end
 
   end
 
   context 'bet handling' do
+
     before(:each) do
       @initial_pbudget = player.budget
       game.bet = 20
     end
+
     describe 'one hand' do
       it 'player wins, player hand bigger than house' do
         game.player.hands[0].cards.push(cards[:A],cards[8])
@@ -190,11 +272,13 @@ describe Game do
         expect(player.budget).to eq @initial_pbudget
       end
     end
+
     describe 'more than one hand' do
+
       before(:each) do
         player.hands.push(Hand.new)
       end
-    
+
       it 'player has 2 hands, wins on both. One hand has blackjack. Blackjack not valid with splitting' do
         # player.hands.push(Hand.new)
         player.hands[0].cards.push(cards[:A],cards[:K])
@@ -203,6 +287,7 @@ describe Game do
         game.winner
         expect(player.budget).to eq @initial_pbudget + (game.bet * player.hands.length)
       end
+
       it 'one of the hands is busted' do
         # player.hands.push(Hand.new)
         player.hands[0].cards.push(cards[:A],cards[:K])
@@ -211,6 +296,7 @@ describe Game do
         game.winner
         expect(player.budget).to eq @initial_pbudget
       end
+
       it 'one busted and one smaller than the house' do
         # player.hands.push(Hand.new)
         player.hands[0].cards.push(cards[5],cards[:K])
@@ -238,6 +324,7 @@ describe Game do
 
     end
   end
+
   context 'main game' do
     it 'plays, runs out of budget, then game over'do
       allow(player).to receive(:no_budget?).and_return(true)
@@ -246,4 +333,5 @@ describe Game do
       expect{game.winner}.to output{"#{player.name} run has no budget left, game over"}.to_stdout
     end
   end
+
 end

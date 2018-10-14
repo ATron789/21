@@ -52,6 +52,7 @@ class Game
         puts 'the bet cannot be bigger than the user budget, try again'
         bet_input
     end
+    puts
   end
 
   def deal_the_cards
@@ -63,6 +64,7 @@ class Game
       puts "#{player.name}\'s second card is #{player.hands[-1].cards[1].output_card}"
       deck.deal(house.hand.cards)
       puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}"
+      puts
   end
 #following method is for testing purposes
   def deal_one_card
@@ -78,6 +80,11 @@ class Game
 
   def hit_or_stand
     player.hands.each do |hand|
+    if player.hands.length > 1
+      puts '-----------------'
+      puts "| Hand number #{player.hands.index(hand) + 1} |"
+      puts '-----------------'
+    end
       if hand.blackjack?
         puts 'BLACKJACK!'
         puts
@@ -85,7 +92,8 @@ class Game
         hand.show_cards
         return nil
       end
-      system 'clear'
+      puts "#{player.name} hand"
+      puts
       hand.show_cards
       puts
       puts "#{player.name}\'s hand value is #{hand.hand_value}"
@@ -96,7 +104,7 @@ class Game
       end
       puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}\n"
       puts 'press h for hit or press s for stand'
-      #implent splitting from here 
+      #implent splitting from here
 
       choice = gets.chomp.downcase
       case choice
@@ -119,6 +127,17 @@ class Game
       end
     end
   end
+#this is so wrong
+  # def splitting
+  #   player.hands.each do |hand|
+  #     binding.pry
+  #     if  hand.cards[0].rank == hand.cards[1].rank && hand.cards.length == 2
+  #       player.hands.push(Hand.new)
+  #       player.hands[1].cards.push(player.hands[0].cards.slice!(0))
+  #     end
+  #   end
+  # end
+
 
 
   def house_logic
@@ -128,14 +147,12 @@ class Game
       house.hand.show_cards
       return nil
     end
-    return nil if player.hands[0].bust?
+    return nil if player.hands.all? { |hand| hand.bust?}
     if house.hand.bust?
       puts "#{house.name} busted, #{player.name} wins"
       return nil
     end
-      #we need anther ace_check here
-
-    if  house.hand.best_value < 17 || house.hand.best_value < player.hands[0].best_value
+    if  house.hand.best_value < 17 || house.hand.best_value < player.best_hand
       puts "#{house.name} hand is"
       puts
       house.hand.show_cards
@@ -165,9 +182,11 @@ class Game
 
   def winner
     player.hands.each do |hand|
-      puts '----------------'
-      puts "|Hand number #{player.hands.index(hand) + 1} |"
-      puts '----------------'
+      if player.hands.length > 1
+        puts '-----------------'
+        puts "| Hand number #{player.hands.index(hand) + 1} |"
+        puts '-----------------'
+      end
       puts "#{player.name} got"
       hand.show_cards
       puts
