@@ -45,6 +45,23 @@ describe Game do
     end
   end
 
+  context 'splitting' do
+    it 'player has a hand with 2 cards, he/she decides to split' do
+      player.hands[0].cards.push(cards[5],cards[5])
+      allow(game).to receive(:gets).and_return("y\n")
+      game.splitting
+      expect(player.hands.length).to eq 2
+    end
+
+    it 'player has a hand with 2 cards, he/she decides not to split' do
+      player.hands[0].cards.push(cards[5],cards[5])
+      allow(game).to receive(:gets).and_return("n\n")
+      game.splitting
+      expect(player.hands.length).not_to eq 2
+    end
+
+  end
+
   context 'hit or stand' do
     it 'when hit receive a card till it busts' do
       allow(game).to receive(:gets).and_return("no", "h\n")
@@ -75,17 +92,6 @@ describe Game do
       expect(game.player.hands[0].best_value).to eq player.hands[0].soft_hand_value
     end
   end
-
-  # describe 'splitting' do
-  #   before(:each) do
-  #     player.hands[0].cards.push(cards[:K],cards[:K])
-  #     @original_hands_number = player.hands.length
-  #   end
-  #   it 'player decides to split' do
-  #     game.splitting
-  #     expect(player.hands.length).to_not eq @original_hands_number
-  #   end
-  # end
 
 
   describe 'house logic' do

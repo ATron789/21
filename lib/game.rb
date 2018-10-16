@@ -77,6 +77,41 @@ class Game
     puts "#{house.name} got  #{house.hand.cards[-1].output_card}"
   end
 
+  def splitting
+    player.hands.each do |hand|
+      if hand.doubles?
+        puts 'you have 2 cards with the same rank'
+        puts 'do you want to split your hand'
+        puts
+        puts '----------------'
+        hand.show_cards
+        puts '----------------'
+        puts
+        puts 'press y to split, press n to keep your hand'
+        begin
+          choice = gets.chomp.downcase
+          # binding.pry
+          case choice
+          when 'y' then
+            player.hands.push(Hand.new)
+            player.hands[-1].cards.push(hand.cards.shift)
+            return nil
+          when 'n' then
+            return nil
+          else
+            puts 'press y to split, press n to keep your hand'
+            raise ArgumentError
+          end
+        rescue
+          retry
+        end
+
+      end
+
+    end
+  end
+
+
 
   def hit_or_stand
     player.hands.each do |hand|
@@ -127,16 +162,6 @@ class Game
       end
     end
   end
-#this is so wrong
-  # def splitting
-  #   player.hands.each do |hand|
-  #     binding.pry
-  #     if  hand.cards[0].rank == hand.cards[1].rank && hand.cards.length == 2
-  #       player.hands.push(Hand.new)
-  #       player.hands[1].cards.push(player.hands[0].cards.slice!(0))
-  #     end
-  #   end
-  # end
 
 
 

@@ -33,6 +33,14 @@ class Hand
     self.best_value > 21
   end
 
+  def doubles?
+    if @cards.length == 2
+      @cards.all? { |x| x.rank == @cards[0].rank}
+    else
+      false
+    end
+  end
+
   def best_value
     if ace_check? && self.soft_hand_value <= 21
       return self.soft_hand_value
@@ -44,14 +52,5 @@ class Hand
     return true if self.cards.length == 2 && self.best_value == 21
   end
 
-  # def splitting
-  #   if @cards.length == 2 && @cards.uniq.length == 1
-  #     puts "you want to split?"
-  #     choice = gets.chomp.downcase
-  #     case choice
-  #     when 'y' then
 
-
-  #   end
-  # end
 end
