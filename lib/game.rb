@@ -20,7 +20,12 @@ class Game
   def play
     bet_input
     deal_the_cards
-    # binding.pry
+    # player.hands[0].cards.push(Card.new(rank: 10, suit: 'H'))
+    # player.hands[0].cards.push(Card.new(rank: 10, suit: 'H'))
+    # house.hand.cards.push(Card.new(rank: 9, suit: 'H'))
+    # house.hand.cards.push(Card.new(rank: 8, suit: 'H'))
+    binding.pry
+    splitting
     hit_or_stand
     house_logic
     winner
@@ -28,12 +33,12 @@ class Game
     house.hand_reset
     if player.no_budget?
       puts "#{player.name} run has no budget left, game over"
-    else
-      puts "#{player.name} budget is #{player.budget}"
-      puts "new game, let\'s go. Press any key to continue"
-      system 'clear' if gets.chomp
-      play
+      return nil
     end
+    puts "#{player.name} budget is #{player.budget}"
+    puts "new game, let\'s go. Press any key to continue"
+    system 'clear' if gets.chomp
+    play
   end
 
   def bet_input
@@ -95,9 +100,19 @@ class Game
           when 'y' then
             player.hands.push(Hand.new)
             player.hands[-1].cards.push(hand.cards.shift)
-            return nil
+            [hand, player.hands[-1]].each { |h| deck.deal(h.cards)}
+            player.hands.each  do |h|
+              puts '-----------------'
+              puts "| Hand number #{player.hands.index(h) + 1} |"
+              puts '-----------------'
+              h.show_cards
+              next
+            end
+            # deck.deal(hand.cards)
+            # deck.deal(player.hands[-1].cards)
+            next
           when 'n' then
-            return nil
+            next
           else
             puts 'press y to split, press n to keep your hand'
             raise ArgumentError
@@ -120,7 +135,7 @@ class Game
       puts "| Hand number #{player.hands.index(hand) + 1} |"
       puts '-----------------'
     end
-      if hand.blackjack?
+      if hand.blackjack? && player.hands.length == 1
         puts 'BLACKJACK!'
         puts
         puts "#{player.name}\'s got"
@@ -138,27 +153,35 @@ class Game
         puts
       end
       puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}\n"
-      puts 'press h for hit or press s for stand'
       #implent splitting from here
-
-      choice = gets.chomp.downcase
-      case choice
-      when 'h' then
-        puts
-        deck.deal(hand.cards)
-        puts "#{player.name}\'s got #{hand.cards[-1].output_card}"
-        system 'clear'
-        if hand.bust?
-          puts "#{player.name} busted! The House wins!"
-        else
-          hit_or_stand
+      loop do
+        puts 'press h for hit or press s for stand'
+        begin
+          choice = gets.chomp.downcase
+          case choice
+          when 'h' then
+            puts
+            hand.show_cards
+            deck.deal(hand.cards)
+            puts "#{player.name}\'s got #{hand.cards[-1].output_card}"
+            puts "#{player.name}\'s hand value is #{hand.hand_value}"
+            if hand.bust?
+              puts "#{player.name} busted! The House wins!"
+              break
+            else
+              redo
+            end
+          when 's' then
+            puts 'you stand'
+            break
+          else
+            puts 'invalid input, try again'
+            puts 'press h for hit or press s for stand'
+            raise ArgumentError
+          end
+        rescue
+          retry
         end
-      when 's' then
-        puts 'you stand'
-        system 'clear'
-      else
-        puts 'invalid input, try again'
-        hit_or_stand
       end
     end
   end

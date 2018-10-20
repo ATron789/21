@@ -97,7 +97,6 @@ describe Hand do
     end
     it 'hands has more than 2 cards' do
       hand.cards.push(cards[:A], cards[8], cards[5])
-      binding.pry
       expect(hand.doubles?).to be false
     end
   end
