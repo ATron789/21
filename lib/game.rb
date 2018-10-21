@@ -143,41 +143,38 @@ class Game
         puts
         puts "#{player.name}\'s got"
         hand.show_cards
-        return nil
-      end
-      puts "#{player.name} hand"
-      puts
-      hand.show_cards
-      puts
-      puts "#{player.name}\'s hand value is #{hand.hand_value}"
-      puts
-      if hand.best_value == hand.soft_hand_value
-        puts "#{player.name} has a soft #{hand.soft_hand_value}"
         puts
+        next
       end
-      puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}\n"
+      puts
       #implent splitting from here
       begin
+        puts "#{player.name}\'s hand"
+        puts
+        hand.show_cards
+        puts
+        puts "#{player.name}\'s hand value is #{hand.hand_value}\n"
+        if hand.best_value == hand.soft_hand_value
+          puts
+          puts "#{player.name} has a soft #{hand.soft_hand_value}"
+          puts
+        end
+        puts
+        puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}\n"
+        puts
         puts 'press h for hit or press s for stand'
         choice = gets.chomp.downcase
         case choice
         when 'h' then
           puts
-          hand.show_cards
           deck.deal(hand.cards)
           puts "#{player.name}\'s got #{hand.cards[-1].output_card}"
-          puts "#{player.name}\'s hand value is #{hand.hand_value}"
           puts
-          if hand.best_value == hand.soft_hand_value
-            puts "#{player.name} has a soft #{hand.soft_hand_value}"
-            puts
-          end
           if hand.bust?
             puts "busted!\n"
             next
           end
           raise
-
         when 's' then
           puts 'you stand'
           next
@@ -189,15 +186,15 @@ class Game
         retry
       end
     end
+    puts "#{house.name}\'s turn"
   end
 
 
 
   def house_logic
-    puts "#{house.name}\'s turn"
     puts 'press any key to continue'
     system 'clear' if gets.chomp
-    puts 'I am in house'
+    # puts 'I am in house'
     puts
     if house.hand.blackjack?
       puts "#{house.name} scored a BLACKJACK"
@@ -208,6 +205,8 @@ class Game
     return nil if player.hands.all? { |hand| hand.bust?}
     if house.hand.bust?
       puts "#{house.name} busted, #{player.name} wins"
+      puts 'press any key to continue'
+      system 'clear' if gets.chomp
       return nil
     end
     if  house.hand.best_value < 17 || house.hand.best_value < player.best_hand
@@ -239,7 +238,7 @@ class Game
   end
 
   def winner
-    puts "I am in winner"
+    # puts "I am in winner"
     player.hands.each do |hand|
       if player.hands.length > 1
         puts '-----------------'
@@ -263,19 +262,31 @@ class Game
           player.budget += @bet * 1.5
           puts "#{player.name} wins 3:2 of the original bet"
           puts "#{player.name} wins #{@bet * 1.5}"
+          puts 'press any key to continue'
+          gets.chomp
+          puts
           next
         end
         player.budget += @bet
         puts "#{player.name} wins #{@bet}"
+        puts 'press any key to continue'
+        gets.chomp
+        puts
         next
       end
       if hand.bust? || (hand.best_value < house.hand.best_value && !house.hand.bust?)
         player.budget -= @bet
         puts "#{player.name} loses #{@bet}"
+        puts 'press any key to continue'
+        gets.chomp
+        puts
         next
       end
       if hand.best_value == house.hand.best_value
         puts "Bets are null"
+        puts 'press any key to continue'
+        gets.chomp
+        puts
         next
       end
     end
