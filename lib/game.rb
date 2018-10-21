@@ -200,6 +200,10 @@ class Game
       puts "#{house.name} scored a BLACKJACK"
       puts "#{house.name}\'s got"
       house.hand.show_cards
+      puts
+      puts 'press any key to continue'
+      system 'clear' if gets.chomp
+      puts
       return nil
     end
     return nil if player.hands.all? { |hand| hand.bust?}
@@ -207,6 +211,7 @@ class Game
       puts "#{house.name} busted, #{player.name} wins"
       puts 'press any key to continue'
       system 'clear' if gets.chomp
+      puts
       return nil
     end
     if  house.hand.best_value < 17 || house.hand.best_value < player.best_hand
