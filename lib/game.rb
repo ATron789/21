@@ -120,15 +120,18 @@ class Game
         rescue
           retry
         end
-
       end
-
     end
+    puts 'press any key to continue'
+    system 'clear' if gets.chomp
+
   end
 
 
-
   def hit_or_stand
+    puts "\n--------------------------"
+    puts "#{player.name}\'s turn"
+    puts "--------------------------\n"
     player.hands.each do |hand|
     if player.hands.length > 1
       puts '-----------------'
@@ -154,34 +157,36 @@ class Game
       end
       puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}\n"
       #implent splitting from here
-      loop do
+      begin
         puts 'press h for hit or press s for stand'
-        begin
-          choice = gets.chomp.downcase
-          case choice
-          when 'h' then
+        choice = gets.chomp.downcase
+        case choice
+        when 'h' then
+          puts
+          hand.show_cards
+          deck.deal(hand.cards)
+          puts "#{player.name}\'s got #{hand.cards[-1].output_card}"
+          puts "#{player.name}\'s hand value is #{hand.hand_value}"
+          puts
+          if hand.best_value == hand.soft_hand_value
+            puts "#{player.name} has a soft #{hand.soft_hand_value}"
             puts
-            hand.show_cards
-            deck.deal(hand.cards)
-            puts "#{player.name}\'s got #{hand.cards[-1].output_card}"
-            puts "#{player.name}\'s hand value is #{hand.hand_value}"
-            if hand.bust?
-              puts "#{player.name} busted! The House wins!"
-              break
-            else
-              redo
-            end
-          when 's' then
-            puts 'you stand'
-            break
-          else
-            puts 'invalid input, try again'
-            puts 'press h for hit or press s for stand'
-            raise ArgumentError
           end
-        rescue
-          retry
+          if hand.bust?
+            puts "busted!\n"
+            next
+          end
+          raise
+
+        when 's' then
+          puts 'you stand'
+          next
+        else
+          puts 'invalid input, try again'
+          raise
         end
+      rescue
+        retry
       end
     end
   end
@@ -189,6 +194,11 @@ class Game
 
 
   def house_logic
+    puts "#{house.name}\'s turn"
+    puts 'press any key to continue'
+    system 'clear' if gets.chomp
+    puts 'I am in house'
+    puts
     if house.hand.blackjack?
       puts "#{house.name} scored a BLACKJACK"
       puts "#{house.name}\'s got"
@@ -229,6 +239,7 @@ class Game
   end
 
   def winner
+    puts "I am in winner"
     player.hands.each do |hand|
       if player.hands.length > 1
         puts '-----------------'
