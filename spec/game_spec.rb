@@ -5,6 +5,7 @@ require 'pry'
 describe Game do
 
   before(:each) do
+    allow(RightInput).to receive(:yes_or_no).and_return("n")
     allow($stdout).to receive(:write)
   end
 
@@ -46,14 +47,17 @@ describe Game do
   end
 
   context 'splitting' do
+
+    before(:each) do
+      # allow(RightInput).to receive(:yes_or_no).and_return("y")
+    end
+
     describe 'on one hand' do
       #sometimes it goes for more than 2
       it 'player has a hand with 2 cards, he/she decides to split, first input wrong' do
         player.hands[0].cards.push(cards[5],cards[5])
-        allow(game).to receive(:gets).and_return("ab\n","y\n")
-        binding.pry
+        allow(RightInput).to receive(:yes_or_no).and_return("y")
         game.splitting
-        binding.pry
         expect(player.hands.length).to be > 1
       end
 
@@ -74,7 +78,7 @@ describe Game do
         #sometimes it gives more than 4
         player.hands[0].cards.push(cards[5],cards[5])
         player.hands[1].cards.push(cards[5],cards[5])
-        allow(game).to receive(:gets).and_return("y\n")
+        allow(RightInput).to receive(:yes_or_no).and_return("y")
         game.splitting
         expect(player.hands.length).to be > 2
       end
@@ -83,10 +87,8 @@ describe Game do
         #sometimes it gives more than 3
         player.hands[0].cards.push(cards[:K],cards[:K])
         player.hands[1].cards.push(cards[5],cards[5])
-        allow(game).to receive(:gets).and_return("n\n", "y\n")
-        binding.pry
+        allow(RightInput).to receive(:yes_or_no).and_return("n", "y")
         game.splitting
-        binding.pry
         expect(player.hands.length).to be > 2
       end
 
@@ -397,7 +399,7 @@ describe Game do
   #     allow(player).to receive(:no_budget?).and_return(true)
   #     allow(game).to receive(:gets).and_return('20', 's')
   #     game.play
-  #     binding.pry
+  #
   #     expect{game.winner}.to output{"#{player.name} run has no budget left, game over"}.to_stdout
   #   end
   # end

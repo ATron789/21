@@ -3,6 +3,7 @@ require_relative 'deck'
 require_relative 'player'
 require_relative 'house'
 require_relative 'bet'
+require_relative 'rightinput'
 require 'pry'
 
 
@@ -93,10 +94,9 @@ class Game
         puts '----------------'
         puts
         puts 'press y to split, press n to keep your hand'
-        begin
-          choice = gets.chomp.downcase
-          # binding.pry
-          case choice
+        choice = RightInput.yes_or_no
+
+        case choice
           when 'y' then
             player.hands.push(Hand.new)
             player.hands[-1].cards.push(hand.cards.shift)
@@ -106,25 +106,12 @@ class Game
               puts "| Hand number #{player.hands.index(h) + 1} |"
               puts '-----------------'
               h.show_cards
-              next
             end
-            # deck.deal(hand.cards)
-            # deck.deal(player.hands[-1].cards)
-            next
-          when 'n' then
-            next
-          else
-            puts 'press y to split, press n to keep your hand'
-            raise ArgumentError
-          end
-        rescue
-          retry
         end
       end
     end
     puts 'press any key to continue'
-    system 'clear' if gets.chomp
-
+    # system 'clear' if gets.chomp
   end
 
 
