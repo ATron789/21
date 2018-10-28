@@ -1,4 +1,6 @@
 require_relative 'player'
+require_relative 'screencleaner'
+
 
 class InputReader
 
@@ -17,7 +19,7 @@ class InputReader
     decks_input
     puts "let'\s start!"
     puts "press any key to continue"
-    system 'clear' if gets.chomp
+    Screen.cleaner
   end
 
   def name_input

@@ -4,6 +4,7 @@ require_relative 'player'
 require_relative 'house'
 require_relative 'bet'
 require_relative 'rightinput'
+require_relative 'screencleaner'
 require 'pry'
 
 
@@ -38,7 +39,7 @@ class Game
     end
     puts "#{player.name} budget is #{player.budget}"
     puts "new game, let\'s go. Press any key to continue"
-    system 'clear' if gets.chomp
+    Screen.cleaner
     play
   end
 
@@ -83,35 +84,34 @@ class Game
     puts "#{house.name} got  #{house.hand.cards[-1].output_card}"
   end
 
+  def hand_splitter(hand)
+    player.hands.push(Hand.new)
+    player.hands[-1].cards.push(hand.cards.shift)
+    [hand, player.hands[-1]].each { |h| deck.deal(h.cards)}
+    player.hands.each  do |h|
+      puts '-----------------'
+      puts "| Hand number #{player.hands.index(h) + 1} |"
+      puts '-----------------'
+      h.show_cards
+    end
+  end
+
   def splitting
     player.hands.each do |hand|
-      if hand.doubles?
-        puts 'you have 2 cards with the same rank'
-        puts 'do you want to split your hand'
-        puts
-        puts '----------------'
-        hand.show_cards
-        puts '----------------'
-        puts
-        puts 'press y to split, press n to keep your hand'
-        choice = RightInput.yes_or_no
-
-        case choice
-          when 'y' then
-            player.hands.push(Hand.new)
-            player.hands[-1].cards.push(hand.cards.shift)
-            [hand, player.hands[-1]].each { |h| deck.deal(h.cards)}
-            player.hands.each  do |h|
-              puts '-----------------'
-              puts "| Hand number #{player.hands.index(h) + 1} |"
-              puts '-----------------'
-              h.show_cards
-            end
-        end
-      end
+      next unless hand.doubles?
+      puts 'you have 2 cards with the same rank'
+      puts 'do you want to split your hand'
+      puts
+      puts '----------------'
+      hand.show_cards
+      puts '----------------'
+      puts
+      puts 'press y to split, press n to keep your hand'
+      choice = RightInput.yes_or_no
+      hand_splitter(hand) if choice == 'y'
     end
     puts 'press any key to continue'
-    # system 'clear' if gets.chomp
+    # Screen.cleaner
   end
 
 
@@ -180,7 +180,7 @@ class Game
 
   def house_logic
     puts 'press any key to continue'
-    system 'clear' if gets.chomp
+    Screen.cleaner
     # puts 'I am in house'
     puts
     if house.hand.blackjack?
@@ -189,7 +189,7 @@ class Game
       house.hand.show_cards
       puts
       puts 'press any key to continue'
-      system 'clear' if gets.chomp
+      Screen.cleaner
       puts
       return nil
     end
@@ -197,7 +197,7 @@ class Game
     if house.hand.bust?
       puts "#{house.name} busted, #{player.name} wins"
       puts 'press any key to continue'
-      system 'clear' if gets.chomp
+      Screen.cleaner
       puts
       return nil
     end
@@ -254,31 +254,25 @@ class Game
           player.budget += @bet * 1.5
           puts "#{player.name} wins 3:2 of the original bet"
           puts "#{player.name} wins #{@bet * 1.5}"
-          puts 'press any key to continue'
-          gets.chomp
-          puts
+          Screen.next
           next
         end
         player.budget += @bet
         puts "#{player.name} wins #{@bet}"
-        puts 'press any key to continue'
-        gets.chomp
+        Screen.next
         puts
         next
       end
       if hand.bust? || (hand.best_value < house.hand.best_value && !house.hand.bust?)
         player.budget -= @bet
         puts "#{player.name} loses #{@bet}"
-        puts 'press any key to continue'
-        gets.chomp
-        puts
+        Screen.next
         next
       end
       if hand.best_value == house.hand.best_value
         puts "Bets are null"
         puts 'press any key to continue'
-        gets.chomp
-        puts
+        Screen.next
         next
       end
     end

@@ -5,7 +5,7 @@ require 'pry'
 puts 'Welcome to Alberto\'s Black Jack'
 inputs = InputReader.new
 puts 'press any key to continue'
-system 'clear' if gets.chomp
+Screen.cleaner
 
 inputs.set_up
 player = Player.build(inputs)
