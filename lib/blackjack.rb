@@ -4,7 +4,6 @@ require 'pry'
 
 puts 'Welcome to Alberto\'s Black Jack'
 inputs = InputReader.new
-puts 'press any key to continue'
 Screen.cleaner
 
 inputs.set_up

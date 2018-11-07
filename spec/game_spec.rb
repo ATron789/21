@@ -49,22 +49,22 @@ describe Game do
   context 'splitting' do
 
     before(:each) do
-      # allow(RightInput).to receive(:yes_or_no).and_return("y")
+      allow(RightInput).to receive(:yes_or_no).and_return("y")
     end
 
     describe 'on one hand' do
       #sometimes it goes for more than 2
       it 'player has a hand with 2 cards, he/she decides to split, first input wrong' do
         player.hands[0].cards.push(cards[5],cards[5])
-        allow(RightInput).to receive(:yes_or_no).and_return("y")
-        game.splitting
+        # allow(RightInput).to receive(:yes_or_no).and_return("y")
+        game.splitting(player.hands[0])
         expect(player.hands.length).to be > 1
       end
 
       it 'player has a hand with 2 cards, he/she decides not to split' do
         player.hands[0].cards.push(cards[5],cards[5])
-        allow(game).to receive(:gets).and_return("n\n")
-        game.splitting
+        allow(RightInput).to receive(:yes_or_no).and_return("n")
+        game.splitting(player.hands[0])
         expect(player.hands.length).not_to eq 2
       end
     end
@@ -78,8 +78,8 @@ describe Game do
         #sometimes it gives more than 4
         player.hands[0].cards.push(cards[5],cards[5])
         player.hands[1].cards.push(cards[5],cards[5])
-        allow(RightInput).to receive(:yes_or_no).and_return("y")
-        game.splitting
+        game.splitting(player.hands[0])
+        game.splitting(player.hands[1])
         expect(player.hands.length).to be > 2
       end
 
@@ -88,15 +88,17 @@ describe Game do
         player.hands[0].cards.push(cards[:K],cards[:K])
         player.hands[1].cards.push(cards[5],cards[5])
         allow(RightInput).to receive(:yes_or_no).and_return("n", "y")
-        game.splitting
-        expect(player.hands.length).to be > 2
+        game.splitting(player.hands[0])
+        game.splitting(player.hands[1])
+        expect(player.hands.length).to eq 3
       end
 
       it '2 hands, does not split on any' do
         player.hands[0].cards.push(cards[:K],cards[:K])
         player.hands[1].cards.push(cards[8],cards[8])
-        allow(game).to receive(:gets).and_return("n\n", "n\n")
-        game.splitting
+        allow(RightInput).to receive(:yes_or_no).and_return("n")
+        game.splitting(player.hands[0])
+        game.splitting(player.hands[1])
         expect(player.hands.length).to eq 2
       end
 
@@ -393,7 +395,7 @@ describe Game do
 
     end
   end
-  #something wrong with this test, it gets stucked in a loop sometimes
+  # this test sometimes gets stuck because it gets a double to split
   # context 'main game' do
   #   it 'plays, runs out of budget, then game over'do
   #     allow(player).to receive(:no_budget?).and_return(true)

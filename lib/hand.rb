@@ -52,5 +52,9 @@ class Hand
     return true if self.cards.length == 2 && self.best_value == 21
   end
 
+  def double_down_hand?
+    self.hand_value >= 9 && self.hand_value <= 11
+  end
+
 
 end

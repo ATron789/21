@@ -101,4 +101,17 @@ describe Hand do
     end
   end
 
+  context 'double down cards check' do
+    it 'intial cards are between 9 and 11'do
+      hand.cards.push(cards[:A], cards[8])
+      expect(hand.double_down_hand?).to be true
+    end
+
+    it 'intial cards are not between 9 and 11'do
+      hand.cards.push(cards[5], cards[8])
+      expect(hand.double_down_hand?).to be false
+    end
+
+  end
+
 end

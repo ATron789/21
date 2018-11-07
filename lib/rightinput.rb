@@ -7,3 +7,5 @@ class RightInput
     yes_or_no
   end
 end
+#do it for hit and stands
+#check the press to continue, some times is double

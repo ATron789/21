@@ -22,12 +22,8 @@ class Game
   def play
     bet_input
     deal_the_cards
-    # player.hands[0].cards.push(Card.new(rank: 10, suit: 'H'))
-    # player.hands[0].cards.push(Card.new(rank: 10, suit: 'H'))
-    # house.hand.cards.push(Card.new(rank: 9, suit: 'H'))
-    # house.hand.cards.push(Card.new(rank: 8, suit: 'H'))
     binding.pry
-    splitting
+    # splitting
     hit_or_stand
     house_logic
     winner
@@ -96,22 +92,19 @@ class Game
     end
   end
 
-  def splitting
-    player.hands.each do |hand|
-      next unless hand.doubles?
-      puts 'you have 2 cards with the same rank'
-      puts 'do you want to split your hand'
-      puts
-      puts '----------------'
-      hand.show_cards
-      puts '----------------'
-      puts
-      puts 'press y to split, press n to keep your hand'
-      choice = RightInput.yes_or_no
-      hand_splitter(hand) if choice == 'y'
-    end
-    puts 'press any key to continue'
-    # Screen.cleaner
+  def splitting(hand)
+    return nil unless hand.doubles?
+    puts 'you have 2 cards with the same rank'
+    puts 'do you want to split your hand'
+    puts
+    puts '----------------'
+    hand.show_cards
+    puts '----------------'
+    puts
+    puts 'press y to split, press n to keep your hand'
+    choice = RightInput.yes_or_no
+    hand_splitter(hand) if choice == 'y'
+    Screen.cleaner
   end
 
 
@@ -120,6 +113,7 @@ class Game
     puts "#{player.name}\'s turn"
     puts "--------------------------\n"
     player.hands.each do |hand|
+      splitting(hand)
     if player.hands.length > 1
       puts '-----------------'
       puts "| Hand number #{player.hands.index(hand) + 1} |"
@@ -134,7 +128,6 @@ class Game
         next
       end
       puts
-      #implent splitting from here
       begin
         puts "#{player.name}\'s hand"
         puts
@@ -188,7 +181,6 @@ class Game
       puts "#{house.name}\'s got"
       house.hand.show_cards
       puts
-      puts 'press any key to continue'
       Screen.cleaner
       puts
       return nil
@@ -196,7 +188,6 @@ class Game
     return nil if player.hands.all? { |hand| hand.bust?}
     if house.hand.bust?
       puts "#{house.name} busted, #{player.name} wins"
-      puts 'press any key to continue'
       Screen.cleaner
       puts
       return nil
@@ -225,7 +216,7 @@ class Game
       puts
       puts "it\' a tie!"
     else
-      puts "#{house.name} stands and wins"
+      puts "#{house.name} stands"
     end
   end
 
