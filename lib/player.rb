@@ -18,6 +18,10 @@ class Player
     player1
   end
 
+  def blackjack?
+    @hands.length == 1 && @hands[0].blackjack?
+  end
+
   def no_budget?
     @budget == 0
   end

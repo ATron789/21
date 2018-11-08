@@ -18,7 +18,6 @@ class InputReader
     budget_input
     decks_input
     puts "let'\s start!"
-    puts "press any key to continue"
     Screen.cleaner
   end
 

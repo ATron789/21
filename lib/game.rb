@@ -22,10 +22,10 @@ class Game
   def play
     bet_input
     deal_the_cards
-    binding.pry
     # splitting
     hit_or_stand
     house_logic
+    binding.pry
     winner
     player.hand_reset
     house.hand_reset
@@ -108,6 +108,7 @@ class Game
   end
 
 
+
   def hit_or_stand
     puts "\n--------------------------"
     puts "#{player.name}\'s turn"
@@ -143,7 +144,7 @@ class Game
         puts "#{house.name}\'s card is #{house.hand.cards[1].output_card}\n"
         puts
         puts 'press h for hit or press s for stand'
-        choice = gets.chomp.downcase
+        choice = RightInput.hit_stand
         case choice
         when 'h' then
           puts
@@ -166,13 +167,12 @@ class Game
         retry
       end
     end
-    puts "#{house.name}\'s turn"
   end
 
 
 
   def house_logic
-    puts 'press any key to continue'
+    puts "#{house.name}\'s turn"
     Screen.cleaner
     # puts 'I am in house'
     puts
@@ -220,6 +220,15 @@ class Game
     end
   end
 
+  def blackjack_win(hand)
+    return nil unless hand.blackjack? && player.hands.length == 1 && !house.hand.blackjack?
+    player.budget += @bet * 1.5
+    puts "#{player.name} wins 3:2 of the original bet"
+    puts "#{player.name} wins #{@bet * 1.5}"
+    Screen.next
+    player.budget
+  end
+
   def winner
     # puts "I am in winner"
     player.hands.each do |hand|
@@ -240,14 +249,10 @@ class Game
       puts "#{house.name}\' hand value:"
       puts house.hand.best_value
       puts
+      puts '-----------------'
+      puts
       if house.hand.bust? || (hand.best_value > house.hand.best_value && !hand.bust?)
-        if hand.blackjack? && player.hands.length == 1
-          player.budget += @bet * 1.5
-          puts "#{player.name} wins 3:2 of the original bet"
-          puts "#{player.name} wins #{@bet * 1.5}"
-          Screen.next
-          next
-        end
+        next if blackjack_win(hand)
         player.budget += @bet
         puts "#{player.name} wins #{@bet}"
         Screen.next
@@ -256,13 +261,23 @@ class Game
       end
       if hand.bust? || (hand.best_value < house.hand.best_value && !house.hand.bust?)
         player.budget -= @bet
+        binding.pry
         puts "#{player.name} loses #{@bet}"
         Screen.next
         next
       end
       if hand.best_value == house.hand.best_value
+        binding.pry
+        next if blackjack_win(hand)
+        binding.pry
+        if house.hand.blackjack? && !player.blackjack?
+          binding.pry
+          player.budget -= @bet
+          puts "#{player.name} loses #{@bet}"
+          Screen.next
+          next
+        end
         puts "Bets are null"
-        puts 'press any key to continue'
         Screen.next
         next
       end

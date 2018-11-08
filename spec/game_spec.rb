@@ -15,7 +15,8 @@ describe Game do
       :K  => Card.new(suit: 'C', rank: 'K'),
       8 => Card.new(suit: 'C', rank: 8),
       5 => Card.new(suit: 'C', rank: 5),
-      7 => Card.new(suit: 'C', rank: 5)
+      7 => Card.new(suit: 'C', rank: 5),
+      2 => Card.new(suit: 'C', rank: 2)
     }
   end
 
@@ -109,15 +110,15 @@ describe Game do
 
     describe 'player has one hand' do
       it 'when hit receive a card till it busts' do
-        allow(game).to receive(:gets).and_return("no", "h\n")
         player.hands[0].cards.push(cards[5],cards[8])
         house.hand.cards.push(cards[:K],cards[8])
+        allow(RightInput).to receive(:hit_stand).and_return("h")
         game.hit_or_stand
         expect(player.hands[0].cards.length).to be > 2
         expect(player.hands[0].bust?).to be_truthy
       end
       it 'it stands' do
-        allow(game).to receive(:gets).and_return("s")
+        allow(RightInput).to receive(:hit_stand).and_return("s")
         game.deal_the_cards
         game.hit_or_stand
         expect(player.hands[0].cards.length).to eq 2
@@ -126,7 +127,7 @@ describe Game do
       it 'stays on a soft hand' do
         player.hands[0].cards.push(cards[:A],cards[8])
         house.hand.cards.push(cards[:K],cards[8])
-        allow(game).to receive(:gets).and_return("s")
+        allow(RightInput).to receive(:hit_stand).and_return("s")
         expect{game.hit_or_stand}.to output{"#{player.name} has a soft #{player.hands[0].soft_hand_value}"}.to_stdout
       end
       it 'player got a blackjack' do
@@ -146,7 +147,7 @@ describe Game do
         player.hands[0].cards.push(cards[5],cards[8])
         player.hands[1].cards.push(cards[:K],cards[8])
         house.hand.cards.push(cards[5], cards[:K])
-        allow(game).to receive(:gets).and_return("h\n", "s\n")
+        allow(RightInput).to receive(:hit_stand).and_return('h','s')
         game.hit_or_stand
         expect(player.hands[0].cards.length).to be > 2
         expect(player.hands[1].cards.length).to eq 2
@@ -299,48 +300,71 @@ describe Game do
     end
 
     describe 'one hand' do
-      it 'player wins, player hand bigger than house' do
-        game.player.hands[0].cards.push(cards[:A],cards[8])
-        game.house.hand.cards.push(cards[:K],cards[8])
-        game.winner
-        expect(player.budget).to eq @initial_pbudget += game.bet
+      context 'player wins' do
+        it 'player wins, player hand bigger than house' do
+          game.player.hands[0].cards.push(cards[:A],cards[8])
+          game.house.hand.cards.push(cards[:K],cards[8])
+          game.winner
+          expect(player.budget).to eq @initial_pbudget += game.bet
+        end
+
+        it 'player won with a blackjack' do
+          game.player.hands[0].cards.push(cards[:A],cards[:K])
+          game.house.hand.cards.push(cards[:K],cards[8])
+          game.winner
+          expect(player.budget).to eq @initial_pbudget += (game.bet * 3)/2
+        end
+
+        it 'player won with a blackjack the house has a non blackjack 21' do
+          game.player.hands[0].cards.push(cards[:A],cards[:K])
+          game.house.hand.cards.push(cards[:A],cards[8], cards[2])
+          game.winner
+          expect(player.budget).to eq @initial_pbudget += (game.bet * 3)/2
+        end
+
+        it 'player wins, house busted' do
+          game.player.hands[0].cards.push(cards[:A],cards[8])
+          game.house.hand.cards.push(cards[:K],cards[8], cards[5])
+          game.winner
+          expect(player.budget).to eq @initial_pbudget += game.bet
+        end
       end
 
-      it 'player won with a blackjack' do
-        game.player.hands[0].cards.push(cards[:A],cards[:K])
-        game.house.hand.cards.push(cards[:K],cards[8])
-        game.winner
-        expect(player.budget).to eq @initial_pbudget += (game.bet * 3)/2
-        expect{game.winner}.to output{"#{player.name} wins #{(@bet * 3) / 2}"}.to_stdout
+      context 'house wins' do
+        it 'house wins, players loses the bet' do
+          game.player.hands[0].cards.push(cards[:K],cards[8])
+          game.house.hand.cards.push(cards[:A],cards[8])
+          game.winner
+          expect(player.budget).to eq @initial_pbudget -= game.bet
+        end
+
+        it 'house wins, player busted' do
+          game.player.hands[0].cards.push(cards[:K],cards[8], cards[5])
+          game.house.hand.cards.push(cards[:A],cards[8])
+          game.winner
+          expect(player.budget).to eq @initial_pbudget -= game.bet
+        end
+
+        it 'house wins with blackjack, player has a non blackjack 21' do
+          game.player.hands[0].cards.push(cards[:A],cards[8],cards[2])
+          game.house.hand.cards.push(cards[:A],cards[:K])
+          game.winner
+          expect(player.budget).to eq @initial_pbudget -= game.bet
+        end
       end
-
-
-      it 'player wins, house busted' do
-        game.player.hands[0].cards.push(cards[:A],cards[8])
-        game.house.hand.cards.push(cards[:K],cards[8], cards[5])
-        game.winner
-        expect(player.budget).to eq @initial_pbudget += game.bet
-      end
-
-      it 'house wins, players loses the bet' do
-        game.player.hands[0].cards.push(cards[:K],cards[8])
-        game.house.hand.cards.push(cards[:A],cards[8])
-        game.winner
-        expect(player.budget).to eq @initial_pbudget -= game.bet
-      end
-
-      it 'house wins, player busted' do
-        game.player.hands[0].cards.push(cards[:K],cards[8], cards[5])
-        game.house.hand.cards.push(cards[:A],cards[8])
-        game.winner
-        expect(player.budget).to eq @initial_pbudget -= game.bet
-      end
-
-      it 'tie, bets are null' do
-        player.hands[0].cards.push(cards[:A],cards[:K])
-        house.hand.cards.push(cards[:A],cards[:K])
-        game.winner
-        expect(player.budget).to eq @initial_pbudget
+      describe 'tie' do
+        it 'tie, bets are null' do
+          player.hands[0].cards.push(cards[8],cards[:K])
+          house.hand.cards.push(cards[8],cards[:K])
+          expect{game.winner}.to output(/Bets are null/).to_stdout
+          expect(player.budget).to eq @initial_pbudget
+        end
+        it 'tie, bets are null. Both player and house have a blackjack' do
+          player.hands[0].cards.push(cards[:A],cards[:K])
+          house.hand.cards.push(cards[:A],cards[:K])
+          expect{game.winner}.to output(/Bets are null/).to_stdout
+          expect(player.budget).to eq @initial_pbudget
+        end
       end
     end
 
@@ -393,6 +417,14 @@ describe Game do
         expect(player.budget).to eq @initial_pbudget - game.bet
       end
 
+      it 'house blackjack, player loses on both hands. One hans non bj 21' do
+        player.hands[0].cards.push(cards[8],cards[:K])
+        player.hands[1].cards.push(cards[:A],cards[:K])
+        house.hand.cards.push(cards[:K],cards[:A])
+        game.winner
+        expect(player.budget).to eq @initial_pbudget - (game.bet * 2)
+      end
+
     end
   end
   # this test sometimes gets stuck because it gets a double to split
@@ -401,7 +433,6 @@ describe Game do
   #     allow(player).to receive(:no_budget?).and_return(true)
   #     allow(game).to receive(:gets).and_return('20', 's')
   #     game.play
-  #
   #     expect{game.winner}.to output{"#{player.name} run has no budget left, game over"}.to_stdout
   #   end
   # end
